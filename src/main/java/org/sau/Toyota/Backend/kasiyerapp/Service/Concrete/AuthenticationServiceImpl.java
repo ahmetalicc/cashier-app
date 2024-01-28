@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +33,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RoleRepository roleRepository;
 
     private final JwtService jwtService;
+
+
     @Override
+    @Transactional
     public TokenResponse save(UserRegister userRegister) {
         List<Role> roles = userRegister.getRoleId().stream()
                 .map(roleRepository::findById)
