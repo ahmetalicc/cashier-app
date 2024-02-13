@@ -3,8 +3,8 @@ package org.sau.Toyota.Backend.kasiyerapp.Service.Concrete;
 import lombok.RequiredArgsConstructor;
 import org.sau.Toyota.Backend.kasiyerapp.Dao.RoleRepository;
 import org.sau.Toyota.Backend.kasiyerapp.Dao.UserRepository;
-import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.UserLoginDTO;
-import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.UserRegister;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.UserLoginRequest;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.UserRegisterRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.TokenResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Entity.Role;
 import org.sau.Toyota.Backend.kasiyerapp.Entity.User;
@@ -33,17 +33,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
     @Override
-    public TokenResponse save(UserRegister userRegister) {
-        List<Role> roles = userRegister.getRoleId().stream()
+    public TokenResponse save(UserRegisterRequest userRegisterRequest) {
+        List<Role> roles = userRegisterRequest.getRoleId().stream()
                 .map(roleRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        User user = User.builder().name(userRegister.getName())
-                        .username(userRegister.getUsername())
-                                .password(passwordEncoder.encode(userRegister.getPassword()))
-                                        .email(userRegister.getEmail())
+        User user = User.builder().name(userRegisterRequest.getName())
+                        .username(userRegisterRequest.getUsername())
+                                .password(passwordEncoder.encode(userRegisterRequest.getPassword()))
+                                        .email(userRegisterRequest.getEmail())
                                                 .roles(roles).build();
 
 
@@ -55,9 +55,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse auth(UserLoginDTO userLoginDTO) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDTO.getUsername(), userLoginDTO.getPassword()));
-        User user = userRepository.findByUsername(userLoginDTO.getUsername()).orElseThrow();
+    public TokenResponse auth(UserLoginRequest userLoginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
+        User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow();
         String token = jwtService.generateToken(user);
         return TokenResponse.builder().token(token).build();
     }
