@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CampaignServiceImpl implements CampaignService {
 
-
     private final CampaignRepository campaignRepository;
 
     @Override

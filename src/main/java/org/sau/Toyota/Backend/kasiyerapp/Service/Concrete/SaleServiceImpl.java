@@ -74,11 +74,14 @@ public class SaleServiceImpl implements SaleService {
 
         saleRepository.save(sale);
 
+        logger.info("Sale is saved to the database successfully.");
+
         soldProducts.forEach(soldProduct -> {
             soldProduct.setSale(sale);
             soldProductRepository.save(soldProduct);
         });
 
+        logger.info("Sold Products are saved to the database successfully.");
 
         return SaleResponse.Convert(sale, soldProducts);
     }
