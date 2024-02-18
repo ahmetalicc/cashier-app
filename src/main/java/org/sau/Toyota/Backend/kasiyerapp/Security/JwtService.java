@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,10 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${toyota.security.jwt.secret}")
-
     private String SECRET_KEY;
+
+    @Value("${toyota.security.jwt.expire}")
+    private Long EXPIRE_TIME;
     public String findUsername(String token) {
         return exportToken(token, Claims::getSubject);
     }
@@ -49,7 +52,7 @@ public class JwtService {
                 .setClaims(new HashMap<>())
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *24))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME * 1000))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
 
