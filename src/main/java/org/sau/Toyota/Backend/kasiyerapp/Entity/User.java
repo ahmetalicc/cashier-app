@@ -36,8 +36,8 @@ public class User implements UserDetails {
     @Column(name="user_name",nullable = false,length = 50,unique = true)
     private String username;
 
-    @Column(name="is_active")
-    private boolean is_Active;
+    @Column(name="activeness")
+    private boolean activeness;
 
     @Column(name="password",nullable = false,length = 100,unique = true)
     private String password;
@@ -75,6 +75,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return activeness;
     }
 }
