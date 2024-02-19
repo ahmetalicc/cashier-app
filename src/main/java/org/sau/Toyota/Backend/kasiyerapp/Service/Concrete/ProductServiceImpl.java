@@ -22,14 +22,20 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<ProductResponse> getAllProducts(int page, int size, String sortBy, String sortOrder) {
+    public List<ProductResponse> getAllProducts(int page, int size, String sortBy, String sortOrder, String filter) {
         Sort sort = Sort.by(sortBy).ascending();
         if ("desc".equals(sortOrder)) {
             sort = Sort.by(sortBy).descending();
         }
 
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Product> products = productRepository.findAll(pageable);
+
+        Page<Product> products;
+        if(filter != null && !filter.isEmpty()){
+            products = productRepository.findProductsByNameOrDescriptionContains(filter, pageable);
+        }else {
+            products = productRepository.findAll(pageable);
+        }
         return products.stream()
                 .map(ProductResponse::Convert)
                 .collect(Collectors.toList());
@@ -42,22 +48,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponse> getProductsByCategoryId(Long id) {
-        List<Product> products = productRepository.findAllProductsByCategoryId(id);
+    public List<ProductResponse> getProductsByCategoryId(Long id, int page, int size, String sortBy, String sortOrder) {
+
+        Sort sort = Sort.by(sortBy).ascending();
+        if ("desc".equals(sortOrder)) {
+            sort = Sort.by(sortBy).descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Product> products = productRepository.findAllProductsByCategoryId(id, pageable);
 
         return products.stream()
                 .map(ProductResponse::Convert)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ProductResponse> getFilteredProducts(String searchTerm) {
-        List<Product> products = productRepository.findProductsByNameOrDescriptionContains(searchTerm);
-
-        return products.stream()
-                .map(ProductResponse::Convert)
-                .collect(Collectors.toList());
-    }
 
 
 }

@@ -26,4 +26,13 @@ public class Role {
     @ManyToMany(cascade = CascadeType.ALL
             ,mappedBy = "roles" )
     private List<User> users;
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
 }

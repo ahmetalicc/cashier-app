@@ -1,6 +1,10 @@
 package org.sau.Toyota.Backend.kasiyerapp.Api;
 
 import lombok.RequiredArgsConstructor;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.DataResult;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.Result;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessDataResult;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessResult;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.UserLoginRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.TokenResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.AuthenticationService;
@@ -15,7 +19,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/auth")
-    public ResponseEntity<TokenResponse> auth(@RequestBody UserLoginRequest userLoginRequest){
-        return ResponseEntity.ok(authenticationService.auth(userLoginRequest));
+    public DataResult<TokenResponse> auth(@RequestBody UserLoginRequest userLoginRequest){
+        return new SuccessDataResult<>(authenticationService.auth(userLoginRequest) ,"Login successful.");
     }
 }

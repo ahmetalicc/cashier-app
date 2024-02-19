@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
 
         user.setActiveness(true);
         userRepository.save(user);
-        logger.info(String.format("User %s is activated successfully", user.getUsername()));
+        logger.info(String.format("User %s is activated successfully.", user.getUsername()));
     }
 
 }
