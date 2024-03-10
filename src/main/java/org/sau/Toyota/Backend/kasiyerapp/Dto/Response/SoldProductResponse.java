@@ -14,14 +14,13 @@ public class SoldProductResponse {
     private String productName;
     private int quantity;
     private double price;
-    private String brand;
+
 
     public static SoldProductResponse Convert(SoldProduct soldProduct){
         return SoldProductResponse.builder()
                 .productName(soldProduct.getProduct().getName())
                 .quantity(soldProduct.getQuantity())
                 .price(soldProduct.getProduct().getPrice())
-                .brand(soldProduct.getProduct().getBrand())
                 .build();
     }
 }

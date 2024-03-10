@@ -1,6 +1,7 @@
 package org.sau.Toyota.Backend.kasiyerapp.Dto.Response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.sau.Toyota.Backend.kasiyerapp.Entity.SoldProduct;
 import org.sau.Toyota.Backend.kasiyerapp.Enum.PaymentType;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +21,13 @@ import java.util.stream.Collectors;
 @Builder
 public class SaleResponse {
 
-    private Long id;
+    private Long saleNo;
     private List<SoldProductResponse> soldProducts;
     private double totalAmount;
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private LocalDateTime saleTime;
+    @JsonFormat(pattern = "HH:mm:ss")
+    private LocalTime time;
     private String cashierName;
     private double receivedAmount;
     private double changeAmount;
@@ -35,10 +40,11 @@ public class SaleResponse {
                 .collect(Collectors.toList());
 
         return SaleResponse.builder()
-                .id(sale.getId())
+                .saleNo(sale.getId())
                 .soldProducts(soldProductResponses)
                 .totalAmount(sale.getTotalAmount())
                 .saleTime(sale.getSaleTime())
+                .time(sale.getTime())
                 .cashierName(sale.getCashierName())
                 .receivedAmount(sale.getReceivedAmount())
                 .changeAmount(sale.getChangeAmount())

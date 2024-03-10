@@ -24,7 +24,7 @@ public class Product {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
     @Column(name = "price", length = 50, nullable = false)
-    private Long price;
+    private Double price;
     @Column(name = "image")
     private byte[] image;
     @Column(name = "description", length = 1000, nullable = false)

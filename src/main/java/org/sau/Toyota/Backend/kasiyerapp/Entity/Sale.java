@@ -9,6 +9,7 @@ import org.sau.Toyota.Backend.kasiyerapp.Enum.PaymentType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,9 @@ public class Sale {
 
     @Column(name = "sale_time", length = 100, nullable = false)
     private LocalDateTime saleTime;
+
+    @Column(name = "time", length = 50)
+    private LocalTime time;
 
     @Column(name = "cashier_name", length = 50)
     private String cashierName;

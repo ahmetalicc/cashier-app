@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="products" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="68c194df-f2c6-406f-a3f4-1beb4a890990">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="KasiyerApp.jrdax"/>
+	<parameter name="saleId" class="java.lang.Long" isForPrompting="false"/>
+
+	<queryString language="SQL">
+		<![CDATA[SELECT p.name, p.price, s.quantity
+           FROM products p
+JOIN sold_product s ON p.id = s.product_id
+WHERE s.sale_id = $P{saleId}]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+
+	</field>
+	<field name="price" class="java.lang.Double">
+
+	</field>
+	<field name="quantity" class="java.lang.Integer">
+
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="99" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="30" width="100" height="30" uuid="b4f7a5fd-ed96-4be8-ac28-060cc397fdff"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="30" width="100" height="30" uuid="09836f17-2224-4e5a-afe1-7ed859bbb24d"/>
+				<textFieldExpression><![CDATA[$F{quantity} + "x" + $F{price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="30" width="100" height="30" uuid="61060bf9-3ccc-4734-a233-667655ced209"/>
+				<textFieldExpression><![CDATA[($F{quantity} * $F{price})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

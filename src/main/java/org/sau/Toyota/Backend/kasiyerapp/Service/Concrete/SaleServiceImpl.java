@@ -14,6 +14,7 @@ import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.SaleService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,7 @@ public class SaleServiceImpl implements SaleService {
         Sale sale = new Sale();
 
         sale.setSaleTime(LocalDateTime.now());
+        sale.setTime(LocalTime.now());
         sale.setCashierName(saleRequest.getCashierName());
         sale.setReceivedAmount(saleRequest.getReceivedAmount());
         sale.setPaymentType(saleRequest.getPaymentType());
@@ -48,7 +50,8 @@ public class SaleServiceImpl implements SaleService {
                 .map(soldProductRequest -> {
                     SoldProduct soldProduct = new SoldProduct();
 
-                    Product product = productRepository.findById(soldProductRequest.getProductId()).orElseThrow();
+                    Product product = productRepository.findById(soldProductRequest.getProductId())
+                            .orElseThrow(()-> new RuntimeException(String.format("Product not found with id:%s", soldProductRequest.getProductId())));
                     soldProduct.setProduct(product);
                     soldProduct.setQuantity(soldProductRequest.getQuantity());
 
@@ -98,34 +101,42 @@ public class SaleServiceImpl implements SaleService {
         return totalAmount;
     }
 
-    private double calculateDiscount(Campaign campaign, double productPrice, int quantity){
+    private double calculateDiscount(Campaign campaign, double productPrice, int quantity) {
         double discount = 0;
-        if(campaign != null){
+        if (campaign != null) {
             Long campaignId = campaign.getCategory().getId();
-            if (campaignId == 1) {
-                int discountQuantity = quantity / 3;
-                discount = discountQuantity * productPrice;
-            } else if (campaignId == 2) {
-                if(productPrice * quantity >= 150){
-                    discount = productPrice * quantity * 0.05;
-                }
-            } else if (campaignId == 3) {
-                if (productPrice * quantity >= 500) {
-                    discount = productPrice * quantity * 0.10;
-                }
-            } else if (campaignId == 4) {
-                if (productPrice * quantity >= 100) {
-                    discount = productPrice * quantity * 0.20;
-                }
-            } else if (campaignId == 5) {
-                if (productPrice * quantity >= 300) {
-                    discount = 50;
-                }
+            switch (campaignId.intValue()) {
+                case 1:
+                    int discountQuantity = quantity / 3;
+                    discount = discountQuantity * productPrice;
+                    break;
+                case 2:
+                    if (productPrice * quantity >= 150) {
+                        discount = productPrice * quantity * 0.05;
+                    }
+                    break;
+                case 3:
+                    if (productPrice * quantity >= 500) {
+                        discount = productPrice * quantity * 0.10;
+                    }
+                    break;
+                case 4:
+                    if (productPrice * quantity >= 100) {
+                        discount = productPrice * quantity * 0.20;
+                    }
+                    break;
+                case 5:
+                    if (productPrice * quantity >= 300) {
+                        discount = 50;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-
         return discount;
     }
+
 
     private void updateStock(List<SoldProduct> soldProducts){
         for (SoldProduct soldProduct : soldProducts){

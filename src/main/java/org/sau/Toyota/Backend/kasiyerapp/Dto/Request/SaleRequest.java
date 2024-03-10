@@ -22,8 +22,6 @@ public class SaleRequest {
 
     private PaymentType paymentType;
 
-    private LocalDateTime saleTime;
-
     private String cashierName;
 
 

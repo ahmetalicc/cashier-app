@@ -5,9 +5,10 @@ import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.DataResult;
 import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessDataResult;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.ProductResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.ProductService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -42,6 +43,16 @@ public class ProductController {
         return new SuccessDataResult<>
                 (productService.getProductsByCategoryId(id, page, size, sortBy, sortOrder), "Data has been listed.");
     }
+
+    @GetMapping("/addImg/{id}")
+    public String addImg(@RequestParam("file") MultipartFile file, @PathVariable("id")Long id) throws IOException {
+        try {
+            return productService.addImg(file, id);
+        }
+        catch (NullPointerException e){
+            return e.getMessage();
+        }
+   }
 
 
 }

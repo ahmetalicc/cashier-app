@@ -10,8 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +66,14 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
-
+    @Override
+    public String addImg(MultipartFile file, Long id) throws IOException {
+        Product product = productRepository.findById(id).orElseThrow(
+                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+        product.setImage(file.getBytes());
+        productRepository.save(product);
+        byte[] imageData = product.getImage();
+        return Base64.getEncoder().encodeToString(imageData);
+    }
 
 }

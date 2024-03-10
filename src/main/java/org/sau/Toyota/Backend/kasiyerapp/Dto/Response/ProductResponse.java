@@ -1,10 +1,10 @@
 package org.sau.Toyota.Backend.kasiyerapp.Dto.Response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.sau.Toyota.Backend.kasiyerapp.Entity.Category;
 import org.sau.Toyota.Backend.kasiyerapp.Entity.Product;
 
 import java.util.Date;
@@ -17,10 +17,11 @@ public class ProductResponse {
 
     private String name;
 
-    private Long price;
+    private Double price;
 
     private byte[] image;
 
+    @JsonFormat(pattern = "yyyy/MM/dd")
     private Date expirationDate;
 
     private String description;
