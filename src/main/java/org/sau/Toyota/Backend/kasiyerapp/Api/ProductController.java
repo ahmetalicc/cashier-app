@@ -1,8 +1,9 @@
 package org.sau.Toyota.Backend.kasiyerapp.Api;
 
 import lombok.RequiredArgsConstructor;
-import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.DataResult;
-import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessDataResult;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.*;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.ProductRequest;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.ProductUpdateRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.ProductResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,13 @@ public class ProductController {
 
     @GetMapping("/getOneProduct/{id}")
     public DataResult<ProductResponse> getOneProduct(@PathVariable("id") Long id){
-        return new SuccessDataResult<>
-                (productService.getOneProduct(id), "Data has been listed.");
+        try {
+            return new SuccessDataResult<>
+                    (productService.getOneProduct(id), "Data has been listed.");
+        }
+        catch (NullPointerException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
     }
 
     @GetMapping("/getProductsByCategoryId/{id}")
@@ -53,6 +59,48 @@ public class ProductController {
             return e.getMessage();
         }
    }
+
+   @GetMapping("/getImg/{id}")
+    public String getImg(@PathVariable Long id){
+        try{
+            return productService.getImg(id);
+        }
+        catch (NullPointerException e){
+            return e.getMessage();
+        }
+   }
+   @PostMapping("/addProduct")
+    public DataResult<ProductResponse> addProduct(@RequestBody ProductRequest productRequest){
+        try {
+            return new SuccessDataResult<>
+                    (productService.addProduct(productRequest), "Product is saved to the database successfully.");
+        }
+        catch (IllegalArgumentException | NullPointerException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
+   }
+
+    @DeleteMapping("deleteProduct/{id}")
+    public Result deleteProduct(@PathVariable Long id) {
+        try {
+            productService.deleteProduct(id);
+            return new SuccessResult("Product is deleted successfully.");
+        } catch (NullPointerException e) {
+            return new ErrorResult(e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateProduct/{id}")
+    public Result updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest productUpdateRequest){
+        try {
+            productService.updateProduct(id, productUpdateRequest);
+            return new SuccessResult(String.format("Product's price and stock information are updated successfully. " +
+                            "The values for price and stock respectively: %s, %s",
+                    productUpdateRequest.getPrice(), productUpdateRequest.getStock()));
+        }catch (NullPointerException e){
+            return new ErrorResult(e.getMessage());
+        }
+    }
 
 
 }

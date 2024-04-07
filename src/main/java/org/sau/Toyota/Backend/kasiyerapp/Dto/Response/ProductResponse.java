@@ -19,12 +19,12 @@ public class ProductResponse {
 
     private Double price;
 
-    private byte[] image;
-
     @JsonFormat(pattern = "yyyy/MM/dd")
     private Date expirationDate;
 
     private String description;
+
+    private int stock;
 
     private String brand;
 
@@ -36,9 +36,9 @@ public class ProductResponse {
        return ProductResponse.builder()
                .name(product.getName())
                .price(product.getPrice())
-               .image(product.getImage())
                .expirationDate(product.getExpirationDate())
                .description(product.getDescription())
+               .stock(product.getStock())
                .brand(product.getBrand())
                .barcode(product.getBarcode())
                .category(product.getCategory().getName())

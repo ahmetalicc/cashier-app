@@ -1,6 +1,8 @@
 package org.sau.Toyota.Backend.kasiyerapp.Service.Abstract;
 
 
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.ProductRequest;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.ProductUpdateRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.ProductResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,4 +19,11 @@ public interface ProductService {
 
     String addImg(MultipartFile file , Long id) throws IOException;
 
+    String getImg(Long id);
+
+    ProductResponse addProduct(ProductRequest productRequest);
+
+    void deleteProduct(Long id);
+
+    void updateProduct(Long id, ProductUpdateRequest productUpdateRequest);
 }

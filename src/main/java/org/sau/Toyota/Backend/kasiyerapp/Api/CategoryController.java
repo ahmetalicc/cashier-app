@@ -1,10 +1,9 @@
 package org.sau.Toyota.Backend.kasiyerapp.Api;
 
 import lombok.RequiredArgsConstructor;
-import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.DataResult;
-import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessDataResult;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.*;
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.CategoryRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.CategoryResponse;
-import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.ProductResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +29,27 @@ public class CategoryController {
     @GetMapping("/getOneCategory/{id}")
     public DataResult<CategoryResponse> getOneCategory(@PathVariable("id") Long id){
         return new SuccessDataResult<>(categoryService.getOneCategory(id), "Data has been listed.");
+    }
+
+    @PostMapping("/addCategory")
+    public Result addCategory(@RequestBody CategoryRequest categoryRequest){
+        try{
+            categoryService.addCategory(categoryRequest);
+            return new SuccessResult("Category added successfully.");
+        }
+        catch (IllegalArgumentException e){
+            return new ErrorResult(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("deleteCategory/{id}")
+    public Result deleteCategory(@PathVariable Long id){
+        try{
+            categoryService.deleteCategory(id);
+            return new SuccessResult("Category is deleted successfully.");
+        }
+        catch (NullPointerException e){
+            return new ErrorResult(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.sau.Toyota.Backend.kasiyerapp.Service.Abstract;
 
+import org.sau.Toyota.Backend.kasiyerapp.Dto.Request.CategoryRequest;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.CategoryResponse;
 
 import java.util.List;
@@ -11,4 +12,8 @@ public interface CategoryService {
 
 
     CategoryResponse getOneCategory(Long id);
+
+    void addCategory(CategoryRequest categoryRequest);
+
+    void deleteCategory(Long id);
 }

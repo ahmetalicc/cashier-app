@@ -2,6 +2,7 @@ package org.sau.Toyota.Backend.kasiyerapp.Api;
 
 import lombok.RequiredArgsConstructor;
 import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.DataResult;
+import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.ErrorDataResult;
 import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.SuccessDataResult;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.CampaignResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.CategoryResponse;
@@ -29,6 +30,11 @@ public class CampaignController {
 
     @GetMapping("/getOneCampaign/{id}")
     public DataResult<CampaignResponse> getOneCampaign(@PathVariable("id") Long id){
-        return new SuccessDataResult<>(campaignService.getOneCampaign(id), "Data has been listed.");
+        try {
+            return new SuccessDataResult<>(campaignService.getOneCampaign(id), "Data has been listed.");
+        }
+        catch (NullPointerException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
     }
 }

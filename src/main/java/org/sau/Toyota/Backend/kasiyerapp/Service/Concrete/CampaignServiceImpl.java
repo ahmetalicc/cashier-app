@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +42,8 @@ public class CampaignServiceImpl implements CampaignService {
 
     @Override
     public CampaignResponse getOneCampaign(Long id) {
-        Campaign campaign = campaignRepository.findById(id).orElseThrow();
+        Campaign campaign = campaignRepository.findById(id).orElseThrow(
+                ()-> new NullPointerException(String.format("Campaign not found with id: %s", id)));
         return CampaignResponse.Convert(campaign);
     }
 }
