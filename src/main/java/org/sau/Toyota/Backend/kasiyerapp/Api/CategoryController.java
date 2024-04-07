@@ -28,7 +28,12 @@ public class CategoryController {
 
     @GetMapping("/getOneCategory/{id}")
     public DataResult<CategoryResponse> getOneCategory(@PathVariable("id") Long id){
-        return new SuccessDataResult<>(categoryService.getOneCategory(id), "Data has been listed.");
+        try {
+            return new SuccessDataResult<>(categoryService.getOneCategory(id), "Data has been listed.");
+        }
+        catch (NullPointerException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
     }
 
     @PostMapping("/addCategory")

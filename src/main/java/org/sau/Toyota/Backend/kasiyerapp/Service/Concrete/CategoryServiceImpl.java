@@ -47,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse getOneCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow();
+        Category category = categoryRepository.findById(id).orElseThrow(
+                ()-> new NullPointerException(String.format("Category not found with id: %s", id)));
         return CategoryResponse.Convert(category);
     }
 
