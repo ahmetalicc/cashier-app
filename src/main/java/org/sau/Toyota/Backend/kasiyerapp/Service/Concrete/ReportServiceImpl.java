@@ -121,8 +121,7 @@ public class ReportServiceImpl implements ReportService {
         String password = "123456";
 
         // Establish the database connection
-        Connection connection = DriverManager.getConnection(url, username, password);
-        return connection;
+        return DriverManager.getConnection(url, username, password);
     }
 
 }

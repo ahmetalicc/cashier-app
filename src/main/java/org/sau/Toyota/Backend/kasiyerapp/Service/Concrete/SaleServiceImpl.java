@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Builder
 public class SaleServiceImpl implements SaleService {
 
     private static final Logger logger = Logger.getLogger(SaleServiceImpl.class);
@@ -100,7 +99,6 @@ public class SaleServiceImpl implements SaleService {
         }
         return totalAmount;
     }
-
     private double calculateDiscount(Campaign campaign, double productPrice, int quantity) {
         double discount = 0;
         if (campaign != null) {

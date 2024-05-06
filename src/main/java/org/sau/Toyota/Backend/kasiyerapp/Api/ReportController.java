@@ -6,12 +6,15 @@ import org.sau.Toyota.Backend.kasiyerapp.Core.Utils.Results.*;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.PdfResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Dto.Response.SaleResponse;
 import org.sau.Toyota.Backend.kasiyerapp.Service.Abstract.ReportService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -43,21 +46,43 @@ public class ReportController {
         }
     }
 
+//    @GetMapping("/getOrdersInPdfFormat/{id}")
+//    public DataResult<PdfResponse> getOrdersInPdfFormat(@PathVariable Long id)
+//            throws JRException, FileNotFoundException, NullPointerException {
+//        try {
+//            byte[] pdfBytes = reportService.getOrdersInPdfFormat(id);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.setContentDispositionFormData("filename", "sales-report.pdf");
+//            headers.setContentLength(pdfBytes.length);
+//            PdfResponse pdfResponse = new PdfResponse(pdfBytes, headers);
+//            return new SuccessDataResult<>(pdfResponse, "Pdf has been created.");
+//        }
+//        catch (JRException | FileNotFoundException | NullPointerException | SQLException e){
+//            return new ErrorDataResult<>(e.getMessage());
+//        }
+//    }
+
     @GetMapping("/getOrdersInPdfFormat/{id}")
-    public DataResult<PdfResponse> getOrdersInPdfFormat(@PathVariable Long id)
-            throws JRException, FileNotFoundException, NullPointerException {
-        try {
-            byte[] pdfBytes = reportService.getOrdersInPdfFormat(id);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("filename", "sales-report.pdf");
-            headers.setContentLength(pdfBytes.length);
-            PdfResponse pdfResponse = new PdfResponse(pdfBytes, headers);
-            return new SuccessDataResult<>(pdfResponse, "Pdf has been created.");
-        }
-        catch (JRException | FileNotFoundException | NullPointerException | SQLException e){
-            return new ErrorDataResult<>(e.getMessage());
-        }
+    public ResponseEntity<Resource> getOrdersInPdfFormat(@PathVariable Long id) throws JRException, SQLException, FileNotFoundException {
+
+        byte[] pdfBytes = reportService.getOrdersInPdfFormat(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+//        headers.setContentDispositionFormData("filename", "sales-report.pdf");
+        headers.setContentLength(pdfBytes.length);
+        PdfResponse pdfResponse = new PdfResponse(pdfBytes, headers);
+        byte[] decoder = pdfResponse.getPdfBytes();
+        InputStream is = new ByteArrayInputStream(decoder);
+        InputStreamResource resource = new InputStreamResource(is);
+
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        ContentDisposition disposition = ContentDisposition.attachment().filename("sales-report.pdf").build();
+        headers.setContentDisposition(disposition);
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
 

@@ -62,12 +62,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         if(categoryName == null || categoryName.trim().isEmpty()){
             logger.error("Category name is null or empty.");
-            throw new IllegalArgumentException("Category name can not be null.");
+            throw new IllegalArgumentException("Category name can not be null or empty.");
         }
 
         if(categoryDesc == null || categoryDesc.trim().isEmpty()){
             logger.error("Category description is null or empty.");
-            throw new IllegalArgumentException("Category description can not be null.");
+            throw new IllegalArgumentException("Category description can not be null or empty.");
         }
         Category category = new Category();
         category.setName(categoryName);
