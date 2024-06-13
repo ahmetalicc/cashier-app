@@ -1,0 +1,35 @@
+global:
+  scrape_interval:     10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: 'authentication_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['authentication-service:8081']
+        labels:
+          application: 'Authentication Service Application'
+  - job_name: 'product_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['product-service:8082']
+        labels:
+          application: 'Product Service Application'
+  - job_name: 'report_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['report-service:8083']
+        labels:
+          application: 'Report Service Application'
+  - job_name: 'sale_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['sale-service:8084']
+        labels:
+          application: 'Sale Service Application'
+  - job_name: 'user_management_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'usermanagement-service:8085' ]
+        labels:
+          application: 'User Management Service Application'

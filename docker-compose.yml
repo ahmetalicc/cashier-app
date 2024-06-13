@@ -1,0 +1,159 @@
+version: '3.7'
+
+services:
+  discovery-server:
+    image: discovery-server:latest
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - micro-service-network
+
+  api-gateway:
+    image: api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+        SPRING_PROFILES_ACTIVE: docker
+        JWT_SECRET : ${JWT_SECRET}
+        JWT_EXPIRE_SECOND : ${JWT_EXPIRE_SECOND}
+    networks:
+      - micro-service-network
+    depends_on:
+      - discovery-server
+      - authentication-service
+      - zipkin
+
+  authentication-service:
+    image: authentication-service:latest
+    container_name: authentication-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - discovery-server
+      - zipkin
+    environment:
+        SPRING_PROFILES_ACTIVE: docker
+        SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/toyota
+        SPRING_DATASOURCE_USERNAME : ${DB_USER}
+        SPRING_DATASOURCE_PASSWORD : ${DB_PASS}
+        JWT_SECRET : ${JWT_SECRET}
+        JWT_EXPIRE_SECOND : ${JWT_EXPIRE_SECOND}
+    networks:
+      - micro-service-network
+
+  product-service:
+    image: product-service:latest
+    container_name: product-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - discovery-server
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/toyota
+      SPRING_DATASOURCE_USERNAME : ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD : ${DB_PASS}
+    networks:
+      - micro-service-network
+
+  report-service:
+    image: report-service:latest
+    container_name: report-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - discovery-server
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/toyota
+      SPRING_DATASOURCE_USERNAME : ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD : ${DB_PASS}
+    networks:
+      - micro-service-network
+
+  sale-service:
+    image: sale-service:latest
+    container_name: sale-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - discovery-server
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/toyota
+      SPRING_DATASOURCE_USERNAME : ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD : ${DB_PASS}
+    networks:
+      - micro-service-network
+
+  usermanagement-service:
+    image: usermanagement-service:latest
+    container_name: usermanagement-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - discovery-server
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/toyota
+      SPRING_DATASOURCE_USERNAME : ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD : ${DB_PASS}
+      JWT_SECRET : ${JWT_SECRET}
+      JWT_EXPIRE_SECOND : ${JWT_EXPIRE_SECOND}
+    networks:
+      - micro-service-network
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - micro-service-network
+
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    container_name: prometheus
+    restart: always
+    ports:
+      - "5000:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - authentication-service
+      - product-service
+      - report-service
+      - sale-service
+      - usermanagement-service
+    networks:
+      - micro-service-network
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=ahmetalicc
+    networks:
+      - micro-service-network
+
+networks:
+  micro-service-network:
+    driver: bridge
