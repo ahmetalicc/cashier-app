@@ -55,3 +55,29 @@ In summary, the project, which contains different roles and different transactio
 
     ![Ekran görüntüsü 2024-06-18 143245](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/2c699944-ee7d-4097-8d96-0e813ea8a5b4)
 
+### Project Architecture
+
+Project Architecture consist of 5 layers.
+
+   ![Ekran görüntüsü 2024-06-19 011830](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/962776a6-7805-4a89-a1b9-d053a15a31ed)
+
+#### Resource
+
+Resource is an interface that allows software applications to communicate with each other. It defines the methods and data formats that applications can use to request and exchange information, enabling different software components to work together and share data efficiently.
+
+#### Domain
+
+In software development, a domain (or entity) refers to a specific area of knowledge or activity that a particular application is concerned with. It represents real-world concepts or objects, along with their attributes and behaviors, that the software system models and manages.
+
+#### DAO
+
+A design pattern that provides an abstract interface for accessing and manipulating data from a database or other persistent storage. It encapsulates the data access logic, making it easier to manage and maintain.
+
+#### Service
+
+A layer in an application that contains business logic and operations. It acts as an intermediary between the controller (handling user inputs) and the DAO (handling data persistence), coordinating the data flow and enforcing business rules.
+
+#### DTO
+
+An object that carries data between processes. It is used to transfer data between different layers of an application (such as between the service layer and the presentation layer) without exposing the internal details of the entity objects.
+
