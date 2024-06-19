@@ -95,7 +95,7 @@ An object that carries data between processes. It is used to transfer data betwe
 ### Microservice Architecture
 
 
-![Ekran görüntüsü 2024-06-19 032121](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1694b08d-cb14-4c55-8a6d-e8de6af94cab)
+![Ekran görüntüsü 2024-06-19 191759](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/d4c1449c-6657-436d-9610-9ad0a69f67ca)
 
 #### API Gateway
 
