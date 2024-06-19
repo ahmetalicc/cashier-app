@@ -5,13 +5,17 @@ This repository is a microservice project developed with spring boot that Toyota
 * [Used Technologies](#used-technologies)
 * [Points of Attention](#points-of-attention)
 * [Desing of Database](#design-of-database)
-* [Application Architecture](#application-architecture)
-* [Security](#security)
+* [Project Architecture](#project-architecture)
 * [Microservice Architecture](#microservice-architecture)
 * [Unit Tests](#unit-tests)
 * [Monitoring](#monitoring)
+   - [Prometheus](#prometheus)
+   - [Grafana](#grafana)
 * [Continuous Integration](#continuous-integration)
+   - [Jenkins](#jenkins)
 * [Docker](#docker)
+   - [Dockerhub](#dockerhub)
+   - [Docker Compose](#docker-compose)
 * [Contact](#contact)
 
 ### About the Project
@@ -21,7 +25,7 @@ In summary, the project, which contains different roles and different transactio
 
 ### Used Technologies
 * JDK17
-- Spring Boot 2.7.18
+* Spring Boot 2.7.18
    - Spring Web
    - Spring Data JPA
 * Maven 4.0.0
@@ -80,4 +84,9 @@ A layer in an application that contains business logic and operations. It acts a
 #### DTO
 
 An object that carries data between processes. It is used to transfer data between different layers of an application (such as between the service layer and the presentation layer) without exposing the internal details of the entity objects.
+
+### Microservice Architecture
+
+
+![Ekran görüntüsü 2024-06-19 032121](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1694b08d-cb14-4c55-8a6d-e8de6af94cab)
 
