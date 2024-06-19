@@ -131,5 +131,11 @@ There are three roles defined in the system: Cashier, Store Manager, and Admin. 
 
 ### Unit Tests
 
+  ![Ekran görüntüsü 2024-06-19 165900](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/6e36dbdd-110c-444c-a604-63a352a622db)
 
+### Monitoring
+
+#### Prometheus
+
+Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. It is designed for reliability, scalability, and easy deployment, making it a popular choice for monitoring microservices architectures.
 
