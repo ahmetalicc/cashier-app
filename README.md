@@ -119,4 +119,17 @@ This service is used to list the products in the system. No authorization is req
 
 This service lists the sales transactions. It should also be able to regenerate the receipt for any specific sale as a PDF. This service requires the role of a store manager. 
 
+  ![Ekran görüntüsü 2024-06-19 160902](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/55c5ee40-e2e4-4d61-a05b-0cabd1708209)
+
+#### Sale Service
+
+Sold products, total amount, and applied promotions should be recorded in the database by the sale service. Sales transactions can be conducted. The cashier role is required to perform these operations.
+
+#### User Management Service
+
+There are three roles defined in the system: Cashier, Store Manager, and Admin. Roles are fixed, and a person can have one or multiple roles. It is mandatory for each person to have at least one role. So in this service there are operations for adding, updating, and deleting users. For deletions, a "soft delete" approach are applied. Only users with the Admin role can access the user management services.
+
+### Unit Tests
+
+
 
