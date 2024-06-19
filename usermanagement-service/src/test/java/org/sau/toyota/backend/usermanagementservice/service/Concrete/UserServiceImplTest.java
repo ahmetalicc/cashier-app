@@ -34,7 +34,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ * Unit tests for {@link UserServiceImpl} class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 

@@ -87,8 +87,12 @@ public class SaleServiceImpl implements SaleService {
 
         return SaleResponse.Convert(sale, soldProducts);
     }
-
-
+    /**
+     * Calculates the total amount for the sold products in the sale.
+     *
+     * @param soldProducts The list of sold products.
+     * @return The total amount for the sold products.
+     */
     private double calculateTotalAmount(List<SoldProduct> soldProducts){
         double totalAmount = 0;
         for(SoldProduct soldProduct : soldProducts){
@@ -99,6 +103,14 @@ public class SaleServiceImpl implements SaleService {
         }
         return totalAmount;
     }
+    /**
+     * Calculates the discount for a sold product based on the associated campaign and quantity.
+     *
+     * @param campaign     The campaign associated with the product.
+     * @param productPrice The price of the product.
+     * @param quantity     The quantity of the product sold.
+     * @return The discount amount for the sold product.
+     */
     private double calculateDiscount(Campaign campaign, double productPrice, int quantity) {
         double discount = 0;
         if (campaign != null) {
@@ -134,8 +146,11 @@ public class SaleServiceImpl implements SaleService {
         }
         return discount;
     }
-
-
+    /**
+     * Updates the stock levels for the sold products in the sale.
+     *
+     * @param soldProducts The list of sold products.
+     */
     private void updateStock(List<SoldProduct> soldProducts){
         for (SoldProduct soldProduct : soldProducts){
             Product product = soldProduct.getProduct();

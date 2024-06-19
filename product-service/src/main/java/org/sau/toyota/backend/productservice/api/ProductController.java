@@ -12,13 +12,29 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ *
+ * REST controller for managing products.
+ * <p>
+ * Provides endpoints to retrieve product data.
+ */
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
-
+    /**
+     * Retrieves a list of products based on pagination and filtering options.
+     *
+     * @param page     Page number (default is 0)
+     * @param size     Number of items per page (default is 3)
+     * @param sortBy   Field name to sort by (default is "id")
+     * @param sortOrder Sorting order ("asc" for ascending, "desc" for descending)
+     * @param filter   Filter criteria (optional)
+     * @return A {@link DataResult} containing a list of {@link ProductResponse} objects.
+     */
     @GetMapping("/getAllProducts")
     public DataResult<List<ProductResponse>> getAllProducts(@RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "3") int size,
@@ -28,7 +44,13 @@ public class ProductController {
         return new SuccessDataResult<>
                 (productService.getAllProducts(page, size, sortBy, sortOrder, filter), "Data has been listed.");
     }
-
+    /**
+     * Retrieves a single product by its ID.
+     *
+     * @param id Product ID
+     * @return A {@link DataResult} containing a {@link ProductResponse} object if the product is found,
+     * or an {@link ErrorDataResult} if the product is not found or an exception occurs.
+     */
     @GetMapping("/getOneProduct/{id}")
     public DataResult<ProductResponse> getOneProduct(@PathVariable("id") Long id){
         try {
@@ -39,7 +61,16 @@ public class ProductController {
             return new ErrorDataResult<>(e.getMessage());
         }
     }
-
+    /**
+     * Retrieves a list of products filtered by category ID, based on pagination and sorting options.
+     *
+     * @param id       Category ID for filtering products
+     * @param page     Page number (default is 0)
+     * @param size     Number of items per page (default is 3)
+     * @param sortBy   Field name to sort by (default is "id")
+     * @param sortOrder Sorting order ("asc" for ascending, "desc" for descending)
+     * @return A {@link DataResult} containing a list of {@link ProductResponse} objects filtered by category ID.
+     */
     @GetMapping("/getProductsByCategoryId/{id}")
     public DataResult<List<ProductResponse>> getProductsByCategoryId(@PathVariable("id") Long id,
                                                                      @RequestParam(defaultValue = "0") int page,
@@ -49,7 +80,14 @@ public class ProductController {
         return new SuccessDataResult<>
                 (productService.getProductsByCategoryId(id, page, size, sortBy, sortOrder), "Data has been listed.");
     }
-
+    /**
+     * Adds an image for a specific product.
+     *
+     * @param file Image file to be uploaded
+     * @param id   Product ID to associate the image with
+     * @return A string indicating the success or failure of the image upload process.
+     * @throws IOException If an I/O error occurs during image upload.
+     */
     @GetMapping("/addImg/{id}")
     public String addImg(@RequestParam("file") MultipartFile file, @PathVariable("id")Long id) throws IOException {
         try {
@@ -59,7 +97,12 @@ public class ProductController {
             return e.getMessage();
         }
    }
-
+    /**
+     * Retrieves the image associated with a specific product.
+     *
+     * @param id Product ID
+     * @return A string representing the image data, or an error message if the image is not found.
+     */
    @GetMapping("/getImg/{id}")
     public String getImg(@PathVariable Long id){
         try{
@@ -69,6 +112,13 @@ public class ProductController {
             return e.getMessage();
         }
    }
+    /**
+     * Adds a new product to the database.
+     *
+     * @param productRequest The request object containing product details
+     * @return A {@link DataResult} containing a {@link ProductResponse} object representing the added product,
+     * or an {@link ErrorDataResult} if an exception occurs during the addition process.
+     */
    @PostMapping("/addProduct")
     public DataResult<ProductResponse> addProduct(@RequestBody ProductRequest productRequest){
         try {
@@ -79,7 +129,12 @@ public class ProductController {
             return new ErrorDataResult<>(e.getMessage());
         }
    }
-
+    /**
+     * Deletes a product from database by its ID.
+     *
+     * @param id Product ID to delete
+     * @return A {@link Result} indicating the success or failure of the deletion operation.
+     */
     @DeleteMapping("deleteProduct/{id}")
     public Result deleteProduct(@PathVariable Long id) {
         try {
@@ -89,7 +144,14 @@ public class ProductController {
             return new ErrorResult(e.getMessage());
         }
     }
-
+    /**
+     * Updates the price and stock information of a product.
+     *
+     * @param id Product ID to update
+     * @param productUpdateRequest The request object containing updated product details
+     * @return A {@link Result} indicating the success or failure of the update operation,
+     * along with the updated price and stock information.
+     */
     @PutMapping("/updateProduct/{id}")
     public Result updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest productUpdateRequest){
         try {

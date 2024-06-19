@@ -5,9 +5,17 @@ import org.sau.toyota.backend.productservice.entity.Category;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ * Fixture class for generating Category objects for testing purposes.
+ */
 public class CategoryFixture extends Fixture<Category> {
 
+    /**
+     * Creates a list of Category objects with randomly generated fake data.
+     *
+     * @return List of Category objects
+     */
     public List<Category> createCategoryList(){
         List<Category> categories = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
@@ -21,7 +29,11 @@ public class CategoryFixture extends Fixture<Category> {
 
         return categories;
     }
-
+    /**
+     * Creates a single Category object with randomly generated fake data.
+     *
+     * @return Category object
+     */
     public Category createCategory(){
         Category category = new Category();
         category.setId(faker.number().randomNumber());
@@ -29,4 +41,5 @@ public class CategoryFixture extends Fixture<Category> {
         category.setDescription(faker.lorem().sentence());
 
         return category;
-    }}
+    }
+}

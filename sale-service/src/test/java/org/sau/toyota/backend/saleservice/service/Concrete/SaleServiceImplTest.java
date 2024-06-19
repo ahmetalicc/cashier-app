@@ -25,7 +25,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ * Unit tests for {@link SaleServiceImpl} class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class SaleServiceImplTest {
 

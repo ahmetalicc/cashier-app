@@ -7,11 +7,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ *
+ * CustomUserDetailsService is a custom implementation of {@link UserDetailsService}.
+ * It is used to load user-specific data during authentication.
+ */
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    /**
+     * Loads user details by username.
+     *
+     * @param username the username identifying the user
+     * @return a fully populated user record
+     * @throws UsernameNotFoundException if the user could not be found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(

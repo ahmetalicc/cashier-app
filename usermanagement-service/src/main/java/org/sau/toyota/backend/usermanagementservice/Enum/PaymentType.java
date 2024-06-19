@@ -1,5 +1,9 @@
 package org.sau.toyota.backend.usermanagementservice.Enum;
-
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ *
+ * Enum representing different types of payment methods.
+ */
 public enum PaymentType {
     CREDIT_CARD,
     DEBIT_CARD,

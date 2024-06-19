@@ -27,7 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ * Unit tests for {@link ProductServiceImpl} class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceImplTest {
 

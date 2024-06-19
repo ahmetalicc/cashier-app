@@ -9,9 +9,18 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ *
+ * This class provides methods to create sample Sale objects for testing purposes.
+ */
 public class SaleFixture extends Fixture<Sale> {
 
+    /**
+     * Creates a list of Sale objects with randomly generated fake data.
+     *
+     * @return List of Sale objects
+     */
     public List<Sale> createSaleList(){
 
         List<Sale> sales = new ArrayList<>();
@@ -34,7 +43,11 @@ public class SaleFixture extends Fixture<Sale> {
 
         return sales;
     }
-
+    /**
+     * Creates a single Sale object with randomly generated fake data.
+     *
+     * @return Sale object
+     */
     public Sale createSale() {
 
         Sale sale = new Sale();

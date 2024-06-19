@@ -23,6 +23,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ * Unit tests for {@link AuthenticationServiceImpl} to verify the functionality of authentication methods.
+ */
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceImplTest {
 
@@ -57,7 +61,7 @@ public class AuthenticationServiceImplTest {
     @DisplayName("The test when token is valid should return a string 'Token is valid.'")
     @Test
     void isValid_whenTheTokenIsValid_ShouldReturnString(){
-        key = Keys.secretKeyFor(SignatureAlgorithm.HS256);  // Generate a valid HMAC key
+        key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         String validToken = Jwts.builder()
                 .setSubject("testUser")
                 .signWith(key)

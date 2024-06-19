@@ -2,7 +2,6 @@ package org.sau.toyota.backend.usermanagementservice.service.Concrete;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.log4j.Logger;
 import org.sau.toyota.backend.usermanagementservice.dao.RoleRepository;
 import org.sau.toyota.backend.usermanagementservice.dao.UserRepository;
 import org.sau.toyota.backend.usermanagementservice.dto.request.AddRemoveRoleRequest;

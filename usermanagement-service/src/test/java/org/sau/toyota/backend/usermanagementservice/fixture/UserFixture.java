@@ -8,9 +8,18 @@ import org.sau.toyota.backend.usermanagementservice.entity.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ *
+ * Fixture class for generating User objects with fake data.
+ */
 public class UserFixture extends Fixture<User>{
 
+    /**
+     * Creates a list of User objects with randomly generated fake data.
+     *
+     * @return List of User objects
+     */
     public List<User> createUserList() {
         List<User> userList = new ArrayList<>();
 
@@ -28,7 +37,11 @@ public class UserFixture extends Fixture<User>{
 
         return userList;
     }
-
+    /**
+     * Creates a single User object with randomly generated fake data.
+     *
+     * @return User object
+     */
     public User createUser() {
         User user = new User();
 
@@ -42,7 +55,11 @@ public class UserFixture extends Fixture<User>{
 
         return user;
     }
-
+    /**
+     * Creates a mock UserRegisterRequest object with randomly generated fake data.
+     *
+     * @return A UserRegisterRequest object with random data.
+     */
     public UserRegisterRequest createUserRegisterRequest(){
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
 
@@ -54,7 +71,11 @@ public class UserFixture extends Fixture<User>{
 
         return userRegisterRequest;
     }
-
+    /**
+     * Creates a mock UserUpdateRequest object with randomly generated fake data.
+     *
+     * @return A UserUpdateRequest object with random data.
+     */
     public UserUpdateRequest createUserUpdateRequest(){
         UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
 

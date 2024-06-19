@@ -7,12 +7,19 @@ import org.sau.toyota.backend.saleservice.entity.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ * Fixture class for generating Product objects and ProductRequest objects for testing purposes.
+ */
 public class ProductFixture extends Fixture<Product> {
 
     CategoryFixture categoryFixture = new CategoryFixture();
 
+    /**
+     * Creates a list of Product objects with randomly generated fake data.
+     *
+     * @return List of Product objects
+     */
     public List<Product> createProductList(){
         List<Product> products = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
@@ -33,7 +40,11 @@ public class ProductFixture extends Fixture<Product> {
 
         return products;
     }
-
+    /**
+     * Creates a single Product object with randomly generated fake data.
+     *
+     * @return Product object
+     */
     public Product createProduct(){
         Product product = new Product();
         product.setId(faker.number().randomNumber());
@@ -48,8 +59,12 @@ public class ProductFixture extends Fixture<Product> {
         product.setCategory(categoryFixture.createCategory());
 
         return product;
-}
-
+    }
+    /**
+     * Creates a ProductRequest object with randomly generated fake data.
+     *
+     * @return ProductRequest object
+     */
     public ProductRequest createProductRequest(){
         ProductRequest productRequest = new ProductRequest();
         productRequest.setName(faker.commerce().productName());

@@ -11,6 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ *
+ * AuthenticationController is responsible for handling authentication-related API requests.
+ * This controller provides endpoints for user login and token validation.
+ */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -18,11 +24,23 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    /**
+     * Handles user login requests.
+     *
+     * @param userLoginRequest the login request containing username and password
+     * @return a SuccessDataResult containing a TokenResponse if login is successful, with a success message
+     */
     @PostMapping("/login")
     public DataResult<TokenResponse> auth(@RequestBody UserLoginRequest userLoginRequest){
         return new SuccessDataResult<>(authenticationService.auth(userLoginRequest) ,"Login successful.");
     }
 
+    /**
+     * Validates a JWT token provided in the Authorization header.
+     *
+     * @param authHeader the Authorization header containing the Bearer token
+     * @return a ResponseEntity containing a SuccessResult if the token is valid, or an ErrorResult if invalid
+     */
     @GetMapping("/validate")
     public ResponseEntity<Result> validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
         try {

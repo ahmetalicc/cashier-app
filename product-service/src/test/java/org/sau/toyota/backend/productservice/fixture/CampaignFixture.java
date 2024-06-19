@@ -5,11 +5,18 @@ import org.sau.toyota.backend.productservice.entity.Campaign;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/** @author Ahmet Alıç
+ * @since 14-06-2024
+ * Fixture class for generating Campaign objects for testing purposes.
+ */
 public class CampaignFixture extends Fixture<Campaign>{
 
     CategoryFixture categoryFixture = new CategoryFixture();
-
+    /**
+     * Creates a list of Campaign objects with randomly generated fake data.
+     *
+     * @return List of Campaign objects
+     */
     public List<Campaign> createCampaignList(){
         List<Campaign> campaigns = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
@@ -24,7 +31,11 @@ public class CampaignFixture extends Fixture<Campaign>{
 
         return campaigns;
     }
-
+    /**
+     * Creates a single Campaign object with randomly generated fake data.
+     *
+     * @return Campaign object
+     */
     public Campaign createCampaign(){
         Campaign campaign = new Campaign();
         campaign.setId(faker.number().randomNumber());

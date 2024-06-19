@@ -26,6 +26,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/** @author Ahmet Alıç
+ * @since 15-06-2024
+ * Unit tests for {@link ReportServiceImpl} class.
+ */
 @ExtendWith(MockitoExtension.class)
 public class ReportServiceImplTest {
 
