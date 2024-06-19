@@ -139,3 +139,19 @@ There are three roles defined in the system: Cashier, Store Manager, and Admin. 
 
 Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. It is designed for reliability, scalability, and easy deployment, making it a popular choice for monitoring microservices architectures.
 
+
+  ![Ekran görüntüsü 2024-06-19 181855](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1af44d6b-ac08-4474-98ba-f50583e0bae2)
+
+#### Grafana
+
+Grafana is an open-source analytics and visualization platform that integrates with various data sources, including Prometheus. It provides a web-based interface for creating, exploring, and sharing dashboards with interactive charts and graphs. Grafana supports querying data from different databases and tools, making it a versatile tool for monitoring and analyzing system performance and metrics.
+
+
+  ![Ekran görüntüsü 2024-06-19 181927](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/ea46d648-7cfa-44b7-a2e3-947090d8f94d)
+
+### Continuous Integration
+
+#### Jenkins
+
+Jenkins is an open-source automation server widely used for continuous integration (CI) and continuous delivery (CD) pipelines. It automates the process of building, testing, and deploying software projects, making it easier for development teams to collaborate and deliver code changes more efficiently. Jenkins supports integration with various version control systems, build tools, and testing frameworks, allowing for flexible and customizable automation workflows.
+
