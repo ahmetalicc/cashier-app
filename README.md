@@ -3,7 +3,7 @@ This repository is a microservice project developed with spring boot that Toyota
 ### Table of Content
 * [About the Project](#about-the-project)
 * [Used Technologies](#used-technologies)
-* [Points of Attention](#points-of-attention)
+* [Important Points](#important-points)
 * [Desing of Database](#design-of-database)
 * [Project Architecture](#project-architecture)
 * [Microservice Architecture](#microservice-architecture)
@@ -45,7 +45,7 @@ In summary, the project, which contains different roles and different transactio
 * Docker
 * Spring Cloud (Api-Gateway, Eureka, Zipkin)
 
-### Points of Attention
+### Important Points
 * Using Spring Boot Framework
 * Layered Architecture
 * Object Oriented Programming
@@ -154,4 +154,36 @@ Grafana is an open-source analytics and visualization platform that integrates w
 #### Jenkins
 
 Jenkins is an open-source automation server widely used for continuous integration (CI) and continuous delivery (CD) pipelines. It automates the process of building, testing, and deploying software projects, making it easier for development teams to collaborate and deliver code changes more efficiently. Jenkins supports integration with various version control systems, build tools, and testing frameworks, allowing for flexible and customizable automation workflows.
+
+
+  ![Ekran görüntüsü 2024-06-19 183532](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/cd3a3ea0-b5d5-40b9-b413-d6321b563e0f)
+
+### Docker
+
+Docker is an open-source platform that enables developers to automate the deployment, scaling, and management of applications within lightweight, portable containers.
+
+#### Dockerhub
+
+You can access my dockerhub repository by [clicking here](https://hub.docker.com/u/ahmetalicc) to be able to see all images of the project.
+
+#### Docker Compose
+
+Docker Compose is a tool that allows users to define and manage multi-container Docker applications. With Docker Compose, you can use a YAML file to configure your application’s services, networks, and volumes. This enables you to easily define, deploy, and run complex applications consisting of multiple interconnected containers, ensuring that they work together as intended. Docker Compose simplifies the orchestration and scaling of multi-container environments.
+
+- Build images specified in Docker Compose configuration file
+
+     `docker-compose build`
+
+- Run the application with using Docker Compose configuration file. (Ensure that you set up the database connection in your local computer.)
+  
+     `docker-compose up`
+
+- Stop the running application and remove all containers with using Docker Compose configuration file.
+
+     `docker-compose down`
+
+### Contact
+
+This project is made by Ahmet Alıç. Contact me for the parts you see missing, your different ideas, questions you want to ask and suggestions. 
+(ahmetalicswe@gmail.com)
 
