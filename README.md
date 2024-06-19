@@ -7,6 +7,13 @@ This repository is a microservice project developed with spring boot that Toyota
 * [Desing of Database](#design-of-database)
 * [Project Architecture](#project-architecture)
 * [Microservice Architecture](#microservice-architecture)
+   - [API Gateway](#api-gateway)
+   - [Discovery Server](#discovery-server)
+   - [Authentication Service](#authentication-service)
+   - [Product Service](#product-service)
+   - [Report Service](#report-service)
+   - [Sale Service](#sale-service)
+   - [User Management Service](#user-management-service)
 * [Unit Tests](#unit-tests)
 * [Monitoring](#monitoring)
    - [Prometheus](#prometheus)
@@ -89,4 +96,27 @@ An object that carries data between processes. It is used to transfer data betwe
 
 
 ![Ekran görüntüsü 2024-06-19 032121](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1694b08d-cb14-4c55-8a6d-e8de6af94cab)
+
+#### API Gateway
+
+An API Gateway is a server that acts as an entry point for external clients to access microservices. It is responsible for routing requests, aggregating responses, and often includes functionalities such as authentication, authorization, load balancing, rate limiting, and monitoring. Essentially, the API Gateway provides a unified interface for clients to interact with a complex microservices architecture, simplifying client-side code and managing cross-cutting concerns.
+
+#### Discovery Server
+
+A Discovery Server, also known as a Service Registry, is a centralized server that maintains a registry of all the microservices in the application. Each microservice registers itself with the Discovery Server at startup, providing its network location (IP address and port). The Discovery Server enables service discovery, allowing microservices to find and communicate with each other without hard-coding network locations, thus facilitating dynamic scalability and resilience.
+
+#### Authentication Service
+
+The Authentication Service is the central component where security transactions are performed. When a user logs in, the service verifies the user's credentials to ensure they are correct. The authentication and authorization structure is built using the JWT (JSON Web Token) library.
+
+Upon successful login, a unique token is generated for the user. This token has a validity period, allowing the user to make requests to protected endpoints as long as the token remains unexpired. Additionally, the Authentication Service is responsible for embedding user roles within the token, which are then checked during role-based access control in the API Gateway.
+
+#### Product Service
+
+This service is used to list the products in the system. No authorization is required for this service. It handles operations related to products, including listing, adding, and deleting products. Essentially, it coordinates all activities related to products.
+
+#### Report Service
+
+This service lists the sales transactions. It should also be able to regenerate the receipt for any specific sale as a PDF. This service requires the role of a store manager. 
+
 
