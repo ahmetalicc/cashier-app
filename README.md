@@ -40,6 +40,7 @@ In summary, the project, which contains different roles and different transactio
 * Lombok
 * Log4j2
 * JUnit5
+* Jaspersoft
 * Prometheus & Grafana
 * Jenkins
 * Docker
