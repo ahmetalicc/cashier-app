@@ -185,6 +185,6 @@ Docker Compose is a tool that allows users to define and manage multi-container 
 
 ### Contact
 
-This project is made by Ahmet Alıç. Contact me for the parts you see missing, your different ideas, questions you want to ask and suggestions. 
+This project is developed by Ahmet Alıç. Contact for the missing parts, different ideas, questions, and suggestions. 
 (ahmetalicswe@gmail.com)
 
