@@ -40,6 +40,7 @@ In summary, the project, which contains different roles and different transactio
 * Lombok
 * Log4j2
 * JUnit5
+* Jaspersoft
 * Prometheus & Grafana
 * Jenkins
 * Docker
@@ -184,6 +185,6 @@ Docker Compose is a tool that allows users to define and manage multi-container 
 
 ### Contact
 
-This project is made by Ahmet Alıç. Contact me for the parts you see missing, your different ideas, questions you want to ask and suggestions. 
+This project is developed by Ahmet Alıç. Contact for the missing parts, different ideas, questions, and suggestions. 
 (ahmetalicswe@gmail.com)
 
