@@ -242,7 +242,7 @@ public class ProductServiceImplTest {
 
         when(productRepository.findById(id)).thenReturn(Optional.of(product));
 
-        String actual = productService.getImg(id);
+        byte[] actual = productService.getImg(id);
 
         assertNotNull(actual);
         verify(productRepository, times(1)).findById(id);

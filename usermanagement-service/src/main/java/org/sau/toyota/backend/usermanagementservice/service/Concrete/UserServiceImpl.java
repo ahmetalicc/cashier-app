@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     }
     @Override
-    public TokenResponse saveUser(UserRegisterRequest userRegisterRequest) {
+    public UserViewResponse saveUser(UserRegisterRequest userRegisterRequest) {
         List<Role> roles = userRegisterRequest.getRoleId().stream()
                 .map(roleRepository::findById)
                 .filter(Optional::isPresent)
@@ -101,9 +101,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         log.info(String.format("User %s is saved successfully to the database.", userRegisterRequest.getUsername()));
 
-        var token = jwtService.generateToken(user);
-
-        return TokenResponse.builder().token(token).build();
+        return UserViewResponse.Convert(user);
     }
 
     @Override

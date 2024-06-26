@@ -96,8 +96,6 @@ public class ReportServiceImpl implements ReportService {
         JasperReport subReport = JasperCompileManager.compileReport(subReportStream);
         JRSaver.saveObject(subReport, "products.jasper");
 
-        Connection connection = getConnection();
-
         if (mainReport == null || subReport == null) {
             log.info("Report not found.");
             throw new FileNotFoundException("Report not found.");
@@ -105,21 +103,10 @@ public class ReportServiceImpl implements ReportService {
 
         HashMap<String, Object> map = new HashMap<>();
         map.put("saleId", sale.getId());
-        map.put("REPORT_CONNECTION", connection);
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(saleList);
         JasperPrint report = JasperFillManager.fillReport(mainReport, map, dataSource);
         return JasperExportManager.exportReportToPdf(report);
-    }
-
-    public static Connection getConnection() throws SQLException {
-        // Database connection parameters
-        String url = "jdbc:postgresql://localhost:5432/toyota";
-        String username = "postgres";
-        String password = "123456";
-
-        // Establish the database connection
-        return DriverManager.getConnection(url, username, password);
     }
 
 }

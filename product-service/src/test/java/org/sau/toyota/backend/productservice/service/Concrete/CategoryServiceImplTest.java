@@ -1,6 +1,5 @@
 package org.sau.toyota.backend.productservice.service.Concrete;
 
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,10 +32,6 @@ public class CategoryServiceImplTest {
 
     @Mock
     private CategoryRepository categoryRepository;
-
-    @Mock
-    private Logger logger;
-
     @InjectMocks
     private CategoryServiceImpl categoryService;
 

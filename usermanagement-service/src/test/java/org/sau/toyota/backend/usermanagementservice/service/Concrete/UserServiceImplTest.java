@@ -1,6 +1,5 @@
 package org.sau.toyota.backend.usermanagementservice.service.Concrete;
 
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +13,6 @@ import org.sau.toyota.backend.usermanagementservice.dao.UserRepository;
 import org.sau.toyota.backend.usermanagementservice.dto.request.AddRemoveRoleRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserRegisterRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserUpdateRequest;
-import org.sau.toyota.backend.usermanagementservice.dto.response.TokenResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UpdatedUserResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UserViewResponse;
 import org.sau.toyota.backend.usermanagementservice.entity.Role;
@@ -40,9 +38,6 @@ import static org.mockito.Mockito.*;
  */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
-
-    @Mock
-    private Logger logger;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -257,7 +252,7 @@ public class UserServiceImplTest {
         when(roleRepository.findById(anyLong())).thenReturn(Optional.of(role));
         when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
 
-        TokenResponse response = userService.saveUser(request);
+        UserViewResponse response = userService.saveUser(request);
 
         assertNotNull(request.getUsername());
         assertNotNull(request.getPassword());

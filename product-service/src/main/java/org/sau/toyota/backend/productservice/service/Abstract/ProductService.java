@@ -58,9 +58,9 @@ public interface ProductService {
      * Retrieves an image of a product.
      *
      * @param id Product ID
-     * @return string
+     * @return byte[]
      */
-    String getImg(Long id);
+    byte[] getImg(Long id);
     /**
      * Adds a new product to the database.
      *

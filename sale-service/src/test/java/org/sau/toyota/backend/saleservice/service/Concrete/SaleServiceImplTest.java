@@ -1,6 +1,5 @@
 package org.sau.toyota.backend.saleservice.service.Concrete;
 
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,8 +39,6 @@ public class SaleServiceImplTest {
     private SaleRepository saleRepository;
     @Mock
     private SoldProductRepository soldProductRepository;
-    @Mock
-    private Logger logger;
     @InjectMocks
     private SaleServiceImpl saleService;
 

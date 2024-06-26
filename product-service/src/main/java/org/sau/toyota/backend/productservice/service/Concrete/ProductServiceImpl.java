@@ -2,7 +2,6 @@ package org.sau.toyota.backend.productservice.service.Concrete;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.log4j.Logger;
 import org.sau.toyota.backend.productservice.dao.CategoryRepository;
 import org.sau.toyota.backend.productservice.dao.ProductRepository;
 import org.sau.toyota.backend.productservice.dto.request.ProductRequest;
@@ -87,11 +86,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String getImg(Long id) {
+    public byte[] getImg(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
                 ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
-        byte[] imageData = product.getImage();
-        return Base64.getEncoder().encodeToString(imageData);
+        return product.getImage();
     }
 
     @Override

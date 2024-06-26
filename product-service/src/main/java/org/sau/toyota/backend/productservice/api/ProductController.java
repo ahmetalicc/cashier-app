@@ -6,6 +6,10 @@ import org.sau.toyota.backend.productservice.dto.request.ProductRequest;
 import org.sau.toyota.backend.productservice.dto.request.ProductUpdateRequest;
 import org.sau.toyota.backend.productservice.dto.response.ProductResponse;
 import org.sau.toyota.backend.productservice.service.Abstract.ProductService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,17 +105,23 @@ public class ProductController {
      * Retrieves the image associated with a specific product.
      *
      * @param id Product ID
-     * @return A string representing the image data, or an error message if the image is not found.
+     * @return A ResponseEntity containing the image data as a byte array with the appropriate content type,
+     * or an error message if the image is not found.
      */
-   @GetMapping("/getImg/{id}")
-    public String getImg(@PathVariable Long id){
-        try{
-            return productService.getImg(id);
+    @GetMapping("/getImg/{id}")
+    public ResponseEntity<byte[]> getImg(@PathVariable Long id){
+        try {
+            byte[] imageData = productService.getImg(id);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_JPEG);
+            return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+        } catch (NullPointerException e) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
+            return new ResponseEntity<>(e.getMessage().getBytes(), headers, HttpStatus.NOT_FOUND);
         }
-        catch (NullPointerException e){
-            return e.getMessage();
-        }
-   }
+    }
     /**
      * Adds a new product to the database.
      *
