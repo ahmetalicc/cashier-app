@@ -4,7 +4,6 @@ package org.sau.toyota.backend.usermanagementservice.service.Abstract;
 import org.sau.toyota.backend.usermanagementservice.dto.request.AddRemoveRoleRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserRegisterRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserUpdateRequest;
-import org.sau.toyota.backend.usermanagementservice.dto.response.TokenResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UpdatedUserResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UserViewResponse;
 
@@ -33,7 +32,7 @@ public interface UserService {
      * @param userRegisterRequest The request object containing user registration details.
      * @return A TokenResponse object containing the generated JWT token.
      */
-    TokenResponse saveUser(UserRegisterRequest userRegisterRequest);
+    UserViewResponse saveUser(UserRegisterRequest userRegisterRequest);
     /**
      * Updates an existing user's information.
      *

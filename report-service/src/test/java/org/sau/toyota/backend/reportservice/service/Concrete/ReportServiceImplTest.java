@@ -1,7 +1,6 @@
 package org.sau.toyota.backend.reportservice.service.Concrete;
 
 import net.sf.jasperreports.engine.JRException;
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,8 +34,6 @@ public class ReportServiceImplTest {
 
     @Mock
     private SaleRepository saleRepository;
-    @Mock
-    private Logger logger;
     @InjectMocks
     private ReportServiceImpl reportService;
 

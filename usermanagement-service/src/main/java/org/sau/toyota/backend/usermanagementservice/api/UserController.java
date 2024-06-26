@@ -5,7 +5,6 @@ import org.sau.toyota.backend.usermanagementservice.core.results.*;
 import org.sau.toyota.backend.usermanagementservice.dto.request.AddRemoveRoleRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserRegisterRequest;
 import org.sau.toyota.backend.usermanagementservice.dto.request.UserUpdateRequest;
-import org.sau.toyota.backend.usermanagementservice.dto.response.TokenResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UpdatedUserResponse;
 import org.sau.toyota.backend.usermanagementservice.dto.response.UserViewResponse;
 import org.sau.toyota.backend.usermanagementservice.service.Abstract.UserService;
@@ -68,22 +67,28 @@ public class UserController {
      * Registers a new user.
      *
      * @param userRegisterRequest The request containing user registration data.
-     * @return A DataResult containing a TokenResponse object and Registered successfully message.
+     * @return A DataResult containing a UserViewResponse object and new user is added to database successfully message.
      */
     @PostMapping("/save")
-    public DataResult<TokenResponse> saveUser(@RequestBody UserRegisterRequest userRegisterRequest){
-        return new SuccessDataResult<>(userService.saveUser(userRegisterRequest), "Registered successfully.");
+    public DataResult<UserViewResponse> saveUser(@RequestBody UserRegisterRequest userRegisterRequest){
+        return new SuccessDataResult<>(userService.saveUser(userRegisterRequest), "New user is added to database successfully.");
     }
     /**
      * Updates an existing user.
      *
      * @param id                 The ID of the user to update.
      * @param userUpdateRequest  The request containing user update data.
-     * @return A DataResult containing an UpdatedUserResponse object.
+     * @return A DataResult containing an UpdatedUserResponse object if the update is successful,
+     * or an ErrorDataResult containing an error message if the update fails.
      */
     @PutMapping("/update/{id}")
     public DataResult<UpdatedUserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest){
-        return new SuccessDataResult<>(userService.updateUser(id, userUpdateRequest), "User updated successfully.");
+        try {
+            return new SuccessDataResult<>(userService.updateUser(id, userUpdateRequest), "User updated successfully.");
+        }
+        catch (IllegalStateException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
     }
     /**
      * Removes a role from a user.
