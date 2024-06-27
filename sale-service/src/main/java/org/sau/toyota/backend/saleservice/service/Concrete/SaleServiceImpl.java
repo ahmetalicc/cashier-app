@@ -66,7 +66,7 @@ public class SaleServiceImpl implements SaleService {
 
         double totalAmount = calculateTotalAmount(soldProducts);
         if(totalAmount > saleRequest.getReceivedAmount()){
-            log.info(String.format("your budget is %s less than price", totalAmount - saleRequest.getReceivedAmount()));
+            log.error(String.format("your budget is %s less than price", totalAmount - saleRequest.getReceivedAmount()));
             throw new RuntimeException(String.format("your budget is %s less than price", totalAmount - saleRequest.getReceivedAmount()));
         }
         sale.setTotalAmount(totalAmount);

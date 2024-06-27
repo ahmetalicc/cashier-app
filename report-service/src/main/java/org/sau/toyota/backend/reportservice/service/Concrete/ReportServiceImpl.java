@@ -67,6 +67,7 @@ public class ReportServiceImpl implements ReportService {
                 log.info("Invalid filter format. Use yyyy for year, yyyy-MM for year and month, or yyyy-MM-dd for year, month, and day.");
                 throw new IllegalArgumentException("Invalid filter format. Use yyyy for year, yyyy-MM for year and month, or yyyy-MM-dd for year, month, and day.");
             }
+            log.debug("Filtering sales between {} and {}", startDateTime, endDateTime);
             sales = saleRepository.findSalesBySaleTimeBetween(startDateTime, endDateTime, pageable);
         }else {
             sales = saleRepository.findAll(pageable);
@@ -79,15 +80,20 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public SaleResponse getOneOrder(Long id) {
         Sale sale = saleRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Sale not found with id(%s) that is provided:", id)));
-
+                () -> {
+                    log.error("Sale not found with id: {}", id);
+                    return new NullPointerException(String.format("Sale not found with id(%s) that is provided:", id));
+                });
         return SaleResponse.Convert(sale, sale.getSoldProducts());
     }
 
     @Override
     public byte[] getOrdersInPdfFormat(Long id) throws FileNotFoundException, JRException, SQLException {
         Sale sale = saleRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Sale not found with id(%s) that is provided:", id)));
+                () -> {
+                    log.error("Sale not found with id: {}", id);
+                    return new NullPointerException(String.format("Sale not found with id(%s) that is provided:", id));
+                });
         List<Sale> saleList = Collections.singletonList(sale);
         InputStream mainReportStream = getClass().getResourceAsStream("/Sales_.jrxml");
         JasperReport mainReport = JasperCompileManager.compileReport(mainReportStream);
@@ -97,7 +103,7 @@ public class ReportServiceImpl implements ReportService {
         JRSaver.saveObject(subReport, "products.jasper");
 
         if (mainReport == null || subReport == null) {
-            log.info("Report not found.");
+            log.warn("Report not found.");
             throw new FileNotFoundException("Report not found.");
         }
 

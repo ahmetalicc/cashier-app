@@ -36,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
         Page<Category> categories;
         if(filter != null && !filter.isEmpty()){
             categories = categoryRepository.findCategoriesByNameOrDescriptionContains(filter, pageable);
+            log.debug("Filtering categories with filter: {}", filter);
         }else {
             categories = categoryRepository.findAll(pageable);
         }
@@ -47,13 +48,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getOneCategory(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Category not found with id: %s", id)));
+                () -> {
+                    log.warn("Category not found with id: {}", id);
+                    return new NullPointerException(String.format("Category not found with id: %s", id));
+                });
         return CategoryResponse.Convert(category);
     }
 
     @Override
     public void addCategory(CategoryRequest categoryRequest) {
         if(categoryRequest == null){
+            log.error("Category request is null.");
             throw new IllegalArgumentException("Category request can not be null.");
         }
         String categoryName = categoryRequest.getName();
@@ -78,8 +83,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Category not found with id: %s", id)));
-
+                () -> {
+                    log.error("Category not found with id: {}", id);
+                    return new NullPointerException(String.format("Category not found with id: %s", id));
+                });
         categoryRepository.delete(category);
         log.info("Category is deleted with given id:" + id);
     }

@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> products;
         if(filter != null && !filter.isEmpty()){
             products = productRepository.findProductsByNameOrDescriptionContains(filter, pageable);
+            log.debug("Filtering products with filter: {}", filter);
         }else {
             products = productRepository.findAll(pageable);
         }
@@ -54,7 +55,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getOneProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+                () -> {
+                    log.warn("Product not found with id: {}", id);
+                    return new NullPointerException(String.format("Product not found with id: %s", id));
+                });
         return ProductResponse.Convert(product);
     }
 
@@ -77,7 +81,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String addImg(MultipartFile file, Long id) throws IOException {
         Product product = productRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+                () -> {
+                    log.error("Product not found with id: {}", id);
+                    return new NullPointerException(String.format("Product not found with id: %s", id));
+                });
         product.setImage(file.getBytes());
         productRepository.save(product);
         log.info(String.format("Image saved to the database with product id: %s", id));
@@ -88,7 +95,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public byte[] getImg(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+                () -> {
+                    log.error("Product not found with id: {}", id);
+                    return new NullPointerException(String.format("Product not found with id: %s", id));
+                });
         return product.getImage();
     }
 
@@ -96,6 +106,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse addProduct(ProductRequest productRequest) {
 
         if(productRequest == null){
+            log.error("Product request is null.");
             throw new IllegalArgumentException("Product request can not be null.");
         }
         Product product = new Product();
@@ -108,7 +119,10 @@ public class ProductServiceImpl implements ProductService {
         product.setBarcode(productRequest.getBarcode());
 
         Category category = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(
-                ()-> new NullPointerException(String.format("Category not found with id: %s", productRequest.getCategoryId())));
+                () -> {
+                    log.error("Category not found with id: {}", productRequest.getCategoryId());
+                    return new NullPointerException(String.format("Category not found with id: %s", productRequest.getCategoryId()));
+                });
         product.setCategory(category);
 
         productRepository.save(product);
@@ -120,7 +134,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+                () -> {
+                    log.error("Product not found with id: {}", id);
+                    return new NullPointerException(String.format("Product not found with id: %s", id));
+                });
         productRepository.delete(product);
         log.info(String.format("Product is deleted with given id: %s", id));
     }
@@ -128,7 +145,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Product not found with id: %s", id)));
+                () -> {
+                    log.error("Product not found with id: {}", id);
+                    return new NullPointerException(String.format("Product not found with id: %s", id));
+                });
 
         product.setPrice(productUpdateRequest.getPrice());
         product.setStock(productUpdateRequest.getStock());

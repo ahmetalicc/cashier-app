@@ -32,7 +32,11 @@ public class AuthenticationController {
      */
     @PostMapping("/login")
     public DataResult<TokenResponse> auth(@RequestBody UserLoginRequest userLoginRequest){
-        return new SuccessDataResult<>(authenticationService.auth(userLoginRequest) ,"Login successful.");
+        try {
+            return new SuccessDataResult<>(authenticationService.auth(userLoginRequest), "Login successful.");
+        } catch (RuntimeException e){
+            return new ErrorDataResult<>(e.getMessage());
+        }
     }
 
     /**

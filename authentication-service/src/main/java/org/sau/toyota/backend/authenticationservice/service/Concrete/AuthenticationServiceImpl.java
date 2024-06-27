@@ -1,5 +1,6 @@
 package org.sau.toyota.backend.authenticationservice.service.Concrete;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.sau.toyota.backend.authenticationservice.dao.UserRepository;
@@ -27,15 +28,36 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public TokenResponse auth(UserLoginRequest userLoginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
-        User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(user);
-        return TokenResponse.builder().token(token).build();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
+            log.trace("User authenticated successfully: {}", userLoginRequest.getUsername());
+
+            User user = userRepository.findByUsername(userLoginRequest.getUsername()).orElseThrow(() -> {
+                log.error("User not found with username: {}", userLoginRequest.getUsername());
+                return new RuntimeException("User not found");
+            });
+            log.trace("User found: {}", user);
+
+            String token = jwtService.generateToken(user);
+            log.trace("Token generated for user: {}", user);
+
+            return TokenResponse.builder().token(token).build();
+        } catch (RuntimeException e) {
+            log.error("Error during authentication for user: {}", userLoginRequest.getUsername());
+            throw e;
+        }
     }
 
     @Override
     public void isValid(String token) {
-        jwtService.validateToken(token);
+        try {
+            jwtService.validateToken(token);
+            log.trace("Token is valid: {}", token);
+        } catch (JwtException e) {
+            log.warn("Invalid token: {}", token);
+            throw e;
+        }
     }
 
 }

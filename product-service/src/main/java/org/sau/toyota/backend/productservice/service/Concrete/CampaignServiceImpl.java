@@ -1,6 +1,7 @@
 package org.sau.toyota.backend.productservice.service.Concrete;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.sau.toyota.backend.productservice.dao.CampaignRepository;
 import org.sau.toyota.backend.productservice.dto.response.CampaignResponse;
 import org.sau.toyota.backend.productservice.entity.Campaign;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class CampaignServiceImpl implements CampaignService {
 
     private final CampaignRepository campaignRepository;
@@ -31,6 +33,7 @@ public class CampaignServiceImpl implements CampaignService {
         Page<Campaign> campaigns;
         if(filter != null && !filter.isEmpty()){
             campaigns = campaignRepository.findCampaignsByNameOrDescriptionContains(filter, pageable);
+            log.debug("Filtering campaigns with filter: {}", filter);
         }else {
             campaigns = campaignRepository.findAll(pageable);
         }
@@ -42,7 +45,10 @@ public class CampaignServiceImpl implements CampaignService {
     @Override
     public CampaignResponse getOneCampaign(Long id) {
         Campaign campaign = campaignRepository.findById(id).orElseThrow(
-                ()-> new NullPointerException(String.format("Campaign not found with id: %s", id)));
+                () -> {
+                    log.warn("Campaign not found with id: {}", id);
+                    return new NullPointerException(String.format("Campaign not found with id: %s", id));
+                });
         return CampaignResponse.Convert(campaign);
     }
 }
