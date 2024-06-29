@@ -18,11 +18,13 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /** @author Ahmet Alıç
  * @since 14-06-2024
- *
  * This class represents an authentication filter for handling JWT token authentication and role-based access control.
  * It is a custom Gateway Filter Factory class for Spring Cloud Gateway.
  * This filter intercepts incoming requests, validates JWT tokens, and checks if the user has the necessary roles
@@ -59,7 +61,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         ErrorResult errorResult = new ErrorResult(message);
         ObjectMapper objectMapper = new ObjectMapper();
         exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        byte[] bytes = new byte[0];
+        byte[] bytes;
         try {
             bytes = objectMapper.writeValueAsBytes(errorResult);
         } catch (JsonProcessingException e) {
@@ -84,23 +86,20 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
      */
     @Override
     public GatewayFilter apply(Config config) {
-        return ((exchange, chain) -> {
+        return (exchange, chain) -> {
             if (routeValidator.isSecured.test(exchange.getRequest())) {
                 //header contains token or not
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                     log.debug("HTTP request does not contain valid header.");
                     return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "Token is not valid");
                 }
-                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                String authHeader = Objects.requireNonNull(exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).get(0);
 
                 HttpHeaders httpHeaders = new HttpHeaders();
                 httpHeaders.set("Authorization", authHeader);
                 HttpEntity<Object> httpRequest = new HttpEntity<>(httpHeaders);
-                // Communicating with authentication-service to check whether the token is valid or not.
-                try {
-                    restTemplate.exchange(authServiceUrl, HttpMethod.GET, httpRequest, Object.class);
-                } catch (HttpClientErrorException e) {
-                    log.warn("According to the authentication-service response, token couldn't be validated.");
+
+                if (!validateTokenWithAuthService(httpRequest)) {
                     return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "Token is not valid!");
                 }
 
@@ -108,61 +107,84 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 List<String> roles = jwtUtil.parseTokenGetRoles(token);
                 String username = jwtUtil.getUsernameFromToken(token);
 
-                // It is not mandatory to have any specific role to access these endpoints.
-                // Anyone who has any role can access the ~/product/** endpoints.
-                if (exchange.getRequest().getURI().getPath().startsWith("/product/")){
-                    if (roles.isEmpty()){
-                        log.warn(String.format("user: %s does not have role. ", username));
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-                    }
+                if (!hasRequiredRole(exchange.getRequest().getURI().getPath(), roles, username)) {
+                    return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "User does not have the required role to access this endpoint.");
                 }
-                // It is not mandatory to have any specific role to access these endpoints.
-                // Anyone who has any role can access the ~/category/** endpoints.
-                else if (exchange.getRequest().getURI().getPath().startsWith("/category/")){
-                    if (roles.isEmpty()){
-                        log.warn(String.format("user: %s does not have role. ", username));
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-                    }
-                }
-                // It is not mandatory to have any specific role to access these endpoints.
-                // Anyone who has any role can access the ~/campaign/** endpoints.
-                else if (exchange.getRequest().getURI().getPath().startsWith("/campaign/")){
-                    if (roles.isEmpty()){
-                        log.warn(String.format("user: %s does not have role. ", username));
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-                    }
-                }
-                // Store_Manager role is necessary to be able to access ~/report/** endpoints.
-                else if (exchange.getRequest().getURI().getPath().startsWith("/report/")) {
-                    if(!roles.contains("ROLE_STORE_MANAGER")) {
-                        log.warn(String.format("User %s does not have store_manager role to access /report/** endpoint.", username));
-                        return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "User does not have store_manager role to access /report/** endpoint.");
-                    }
-                }
-                // Cashier role is necessary to be able to access ~/sale/** endpoints.
-                else if (exchange.getRequest().getURI().getPath().startsWith("/sale/")) {
-                    if(!roles.contains("ROLE_CASHIER")) {
-                        log.warn(String.format("User %s does not have cashier role to access /sale/** endpoint.", username));
-                        return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "User does not have cashier role to access /sale/** endpoint.");
-                    }
-                }
-                // Admin role is necessary to be able to access ~/report/** endpoints.
-                else if (exchange.getRequest().getURI().getPath().startsWith("/user/")) {
-                    if (!roles.contains("ROLE_ADMIN")) {
-                        log.warn(String.format("User %s does not have admin role to access /user/** endpoint.", username));
-                        return generateErrorResponse(exchange, HttpStatus.UNAUTHORIZED, "User does not have admin role to access /user/** endpoint.");
-                    }
-                } else {
-                    log.debug("The attempt to access the endpoint was unsuccessful.");
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-                }
-
             }
             return chain.filter(exchange);
-        });
+        };
+    }
+    /**
+     * Validates the token with the authentication service by sending a request with the given HTTP entity.
+     *
+     * @param httpRequest The HTTP entity containing the authorization header
+     * @return True if the token is valid, otherwise false
+     */
+    private boolean validateTokenWithAuthService(HttpEntity<Object> httpRequest) {
+        try {
+            restTemplate.exchange(authServiceUrl, HttpMethod.GET, httpRequest, Object.class);
+            return true;
+        } catch (HttpClientErrorException e) {
+            log.warn("According to the authentication-service response, token couldn't be validated.");
+            return false;
+        }
+    }
+    /**
+     * Map defining required roles for accessing specific endpoint paths.
+     * <p>
+     * Key: Endpoint path prefix.
+     * Value: Required role (empty string if no specific role is required).
+     * </p>
+     */
+    private static final Map<String, String> requiredRoles = new HashMap<>();
+
+    static {
+        requiredRoles.put("/product/", "");
+        requiredRoles.put("/category/", "");
+        requiredRoles.put("/campaign/", "");
+        requiredRoles.put("/report/", "ROLE_STORE_MANAGER");
+        requiredRoles.put("/sale/", "ROLE_CASHIER");
+        requiredRoles.put("/user/", "ROLE_ADMIN");
+    }
+    /**
+     * Checks if the user has the required role to access a given endpoint.
+     * <p>
+     * This method verifies whether the user has the necessary role to access a specific path.
+     * It uses a predefined map of required roles for different paths and matches the user's roles
+     * against the required role for the path.
+     * </p>
+     *
+     * @param path     The path of the endpoint being accessed.
+     * @param roles    A list of roles assigned to the user.
+     * @param username The username of the user attempting to access the endpoint.
+     * @return {@code true} if the user has the required role or if the endpoint does not require a specific role and the user has at least one role; {@code false} otherwise.
+     * @throws ResponseStatusException if the endpoint is not found in the predefined roles map.
+     */
+    public boolean hasRequiredRole(String path, List<String> roles, String username) {
+        String requiredRole = requiredRoles.entrySet().stream()
+                .filter(entry -> path.startsWith(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Endpoint not found"));
+
+        if (requiredRole.isEmpty()) {
+            if (roles.isEmpty()) {
+                log.error(String.format("User %s does not have any role.", username));
+                return false;
+            }
+        } else if (!roles.contains(requiredRole)) {
+            log.warn(String.format("User %s does not have %s role to access endpoint.", username, requiredRole.toLowerCase()));
+            return false;
+        }
+
+        return true;
     }
 
+    /**
+     * Configuration class for the AuthenticationFilter.
+     * This class can be used to define custom configuration properties if needed.
+     */
     public static class Config {
-
+        // Configuration properties if needed
     }
 }
