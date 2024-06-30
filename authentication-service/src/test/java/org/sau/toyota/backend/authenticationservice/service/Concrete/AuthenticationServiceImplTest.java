@@ -1,5 +1,6 @@
 package org.sau.toyota.backend.authenticationservice.service.Concrete;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import java.security.Key;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -57,6 +59,28 @@ public class AuthenticationServiceImplTest {
         assertEquals("mocked_token", tokenResponse.getToken());
         verify(userRepository, times(1)).findByUsername(anyString());
     }
+    @DisplayName("The test when user not found should throw RuntimeException")
+    @Test
+    void auth_whenUserNotFound_ShouldThrowRuntimeException() {
+        UserLoginRequest userLoginRequest = new UserLoginRequest("non_existing_user", "password");
+
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(()-> authenticationService.auth(userLoginRequest))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("User not found");
+    }
+
+    @DisplayName("The test when authentication fails should throw RuntimeException")
+    @Test
+    void auth_whenAuthenticationFails_ShouldThrowRuntimeException() {
+        UserLoginRequest userLoginRequest = new UserLoginRequest("test", "invalid_password");
+
+        when(authenticationManager.authenticate(any())).thenThrow(new RuntimeException("Authentication failed"));
+
+        assertThrows(RuntimeException.class, () -> authenticationService.auth(userLoginRequest));
+        verify(authenticationManager, times(1)).authenticate(any());
+}
 
     @DisplayName("The test when token is valid should return a string 'Token is valid.'")
     @Test
@@ -70,4 +94,14 @@ public class AuthenticationServiceImplTest {
         assertDoesNotThrow(() -> authenticationService.isValid(validToken));
 
     }
+    @DisplayName("The test when token is invalid should throw JwtException")
+    @Test
+    void isValid_whenTokenIsInvalid_ShouldThrowJwtException() {
+        String invalidToken = "invalid_token";
+
+        doThrow(JwtException.class).when(jwtService).validateToken(eq(invalidToken));
+
+        assertThrows(JwtException.class, () -> authenticationService.isValid(invalidToken));
+        verify(jwtService, times(1)).validateToken(eq(invalidToken));
+}
 }
