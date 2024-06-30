@@ -5,7 +5,6 @@ This repository is a microservice project developed with spring boot that Toyota
 * [Used Technologies](#used-technologies)
 * [Important Points](#important-points)
 * [Desing of Database](#design-of-database)
-* [Project Architecture](#project-architecture)
 * [Microservice Architecture](#microservice-architecture)
    - [API Gateway](#api-gateway)
    - [Discovery Server](#discovery-server)
@@ -20,9 +19,6 @@ This repository is a microservice project developed with spring boot that Toyota
    - [Grafana](#grafana)
 * [Continuous Integration](#continuous-integration)
    - [Jenkins](#jenkins)
-* [Docker](#docker)
-   - [Dockerhub](#dockerhub)
-   - [Docker Compose](#docker-compose)
 * [How to Run](#how-to-run)
    - [Running Locally](#running-locally)
    - [Running with Docker](#running-with-docker)
@@ -51,7 +47,7 @@ In summary, the project, which contains different roles and different transactio
 
 ## **Important Points**
 * Using Spring Boot Framework
-* Layered Architecture
+* N-tier Architecture
 * Object Oriented Programming
 * Compatible with SOLID principles
 * Token based authentication and authorization
@@ -70,36 +66,7 @@ In summary, the project, which contains different roles and different transactio
 
     ![Ekran görüntüsü 2024-06-18 143245](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/2c699944-ee7d-4097-8d96-0e813ea8a5b4)
 
-## **Project Architecture**
-
-Project Architecture consist of 5 layers.
-
-   ![Ekran görüntüsü 2024-06-19 011830](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/962776a6-7805-4a89-a1b9-d053a15a31ed)
-
-### Resource
-
-Resource is an interface that allows software applications to communicate with each other. It defines the methods and data formats that applications can use to request and exchange information, enabling different software components to work together and share data efficiently.
-
-### Domain
-
-In software development, a domain (or entity) refers to a specific area of knowledge or activity that a particular application is concerned with. It represents real-world concepts or objects, along with their attributes and behaviors, that the software system models and manages.
-
-### DAO
-
-A design pattern that provides an abstract interface for accessing and manipulating data from a database or other persistent storage. It encapsulates the data access logic, making it easier to manage and maintain.
-
-### Service
-
-A layer in an application that contains business logic and operations. It acts as an intermediary between the controller (handling user inputs) and the DAO (handling data persistence), coordinating the data flow and enforcing business rules.
-
-### DTO
-
-An object that carries data between processes. It is used to transfer data between different layers of an application (such as between the service layer and the presentation layer) without exposing the internal details of the entity objects.
-
 ## **Microservice Architecture**
-
-
-![Ekran görüntüsü 2024-06-19 191759](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/d4c1449c-6657-436d-9610-9ad0a69f67ca)
 
 ### API Gateway
 
@@ -133,7 +100,12 @@ Sold products, total amount, and applied promotions should be recorded in the da
 
 There are three roles defined in the system: Cashier, Store Manager, and Admin. Roles are fixed, and a person can have one or multiple roles. It is mandatory for each person to have at least one role. So in this service there are operations for adding, updating, and deleting users. For deletions, a "soft delete" approach are applied. Only users with the Admin role can access the user management services.
 
+![Ekran görüntüsü 2024-06-19 191759](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/d4c1449c-6657-436d-9610-9ad0a69f67ca)
+
 ## **Unit Tests**
+
+
+A unit test is a type of software testing where individual units or components of a software are tested. The purpose is to validate that each unit of the software performs as expected. Unit tests are implemented for all services of the project using the JUnit5 library. To make the tests effective, an abstract fixture class and other fixture classes extending this abstract class are created. In these fixture classes, test data are generated using the GitHub Faker library. Consequently, all test data are generated randomly and falsely. This approach aims to make test classes less complex and more readable, and generate test data in a more centralized and organized manner.
 
   ![Ekran görüntüsü 2024-06-19 165900](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/6e36dbdd-110c-444c-a604-63a352a622db)
 
@@ -141,64 +113,90 @@ There are three roles defined in the system: Cashier, Store Manager, and Admin. 
 
 ### Prometheus
 
-Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. It is designed for reliability, scalability, and easy deployment, making it a popular choice for monitoring microservices architectures.
+Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. It is designed for reliability, scalability, and easy deployment, making it a popular choice for monitoring microservices architectures. Prometheus is used in this project for comprehensive monitoring by collecting detailed metrics from each microservice. 
 
 
   ![Ekran görüntüsü 2024-06-19 181855](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1af44d6b-ac08-4474-98ba-f50583e0bae2)
 
 ### Grafana
 
-Grafana is an open-source analytics and visualization platform that integrates with various data sources, including Prometheus. It provides a web-based interface for creating, exploring, and sharing dashboards with interactive charts and graphs. Grafana supports querying data from different databases and tools, making it a versatile tool for monitoring and analyzing system performance and metrics.
+Grafana is an open-source analytics and visualization platform that integrates with various data sources, including Prometheus. It provides a web-based interface for creating, exploring, and sharing dashboards with interactive charts and graphs. Grafana is used in this project to effectively visualize the metrics collected by Prometheus, providing real-time insights into the status of my microservices and to create custom dashboards that help track key performance indicators and quickly identify any issues.
 
 
   ![Ekran görüntüsü 2024-06-19 181927](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/ea46d648-7cfa-44b7-a2e3-947090d8f94d)
+
+### Zipkin
+
+Zipkin, an open-source distributed tracing system, tracks requests across microservices, offering insights into performance and dependencies. Zipkin is used in this project to track and analyze the flow of requests across various microservices in order to pinpoint performance issues and improve overall system reliability and performance.
 
 ## **Continuous Integration**
 
 ### Jenkins
 
-Jenkins is an open-source automation server widely used for continuous integration (CI) and continuous delivery (CD) pipelines. It automates the process of building, testing, and deploying software projects, making it easier for development teams to collaborate and deliver code changes more efficiently. Jenkins supports integration with various version control systems, build tools, and testing frameworks, allowing for flexible and customizable automation workflows.
+Jenkins is an open-source automation server widely used for continuous integration (CI) and continuous delivery (CD) pipelines. It automates the process of building, testing, and deploying software projects, making it easier for development teams to collaborate and deliver code changes more efficiently. Jenkins is used in this project to reduce manual errors and accelerate the release cycle. Jenkins’ extensive plugin ecosystem allows for integration with various tools and technologies, enhancing its flexibility and capability.
 
 
   ![Ekran görüntüsü 2024-06-19 183532](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/cd3a3ea0-b5d5-40b9-b413-d6321b563e0f)
 
-## **Docker**
-
-Docker is an open-source platform that enables developers to automate the deployment, scaling, and management of applications within lightweight, portable containers.
-
-### Dockerhub
-
-You can access my dockerhub repository by [clicking here](https://hub.docker.com/u/ahmetalicc) to be able to see all images of the project.
-
-### Docker Compose
-
-Docker Compose is a tool that allows users to define and manage multi-container Docker applications. With Docker Compose, you can use a YAML file to configure your application’s services, networks, and volumes. This enables you to easily define, deploy, and run complex applications consisting of multiple interconnected containers, ensuring that they work together as intended. Docker Compose simplifies the orchestration and scaling of multi-container environments.
-
-- Build images specified in Docker Compose configuration file
-
-     `docker-compose build`
-
-- Run the application with using Docker Compose configuration file. (Ensure that you set up the database connection in your local computer.)
-  
-     `docker-compose up`
-
-- Stop the running application and remove all containers with using Docker Compose configuration file.
-
-     `docker-compose down`
 ## **How to Run**
 ### Running Locally
 **Prerequisites:**
 
-- Ensure you have Java JDK 17 or later installed.
+- Ensure you have Java JDK 17 installed.
 - Ensure you have Maven installed.
+- Ensure you have PostgreSQL installed and running.
 
 **Clone the Repository:**
 
 ```bash
 git clone https://github.com/yourusername/kasiyerapp.git
-cd yourproject
+cd kasiyerapp
 ```
+
+**Set Up Database and Environment Variables:**
+
+  - Create a PostgreSQL database with a name of your choice.
+  - Create a .env file in the root directory of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup. 
+
+**Build the Project:**
+
+In the root directory of the project, run:
+`mvn clean install`
+
+**Run the Application:**
+
+`mvn spring-boot:run`
+
 ### Running with Docker
+**Prerequisites:**
+
+- Ensure you have Docker installed.
+- Ensure you have Docker Compose installed.
+
+**Set Up Database and Environment Variables:**
+
+  - Create a PostgreSQL database with a name of your choice.
+  - Create a .env file in the root directory of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup.
+
+**Build Jar Files and Docker Images for Each Service:**
+
+In the root directory of the project, run:
+`mvn clean install`
+
+```bash
+cd service1
+docker build -t service1 .
+cd ..
+```
+Repeat the above steps for each service (service2, service3, ..., api-gateway, discovery-server).
+
+**Build and Run with Docker Compose:**
+
+`docker-compose up --build`
+
+**Stop the Running Application:**
+
+`docker-compose down`
 
 ## **Contact**
 
