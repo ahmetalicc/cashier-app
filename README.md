@@ -1,6 +1,6 @@
-# Toyota Spring Boot Backend Microservice Project
+# Toyota & 32Bit Spring Boot Backend Microservice Project
 This repository is a microservice project developed with spring boot that Toyota and 32bit companies want for their recruitment process.
-## **Table of Content**
+## **Table of Contents**
 * [About the Project](#about-the-project)
 * [Used Technologies](#used-technologies)
 * [Important Points](#important-points)
@@ -54,19 +54,21 @@ In summary, the project, which contains different roles and different transactio
 * Logging
 * Unit Tests
 * Java Doc
-* Microservice Architecture and dockerization
+* Microservice Architecture and Dockerization
 
 ## **Design of Database**
 - User and Role Tables:
-  - There are 3 roles in the system and there can be more than one user. A user can have one or more roles, and a role can belong to more than one user. Therefore, there must be many-to-many relationships between these tables. While the users table keeps users' name, email, password, activeness and username information, the roles table only keeps role name information.
+  - There are 3 roles in the system and there can be more than one user. A user can have one or more roles, and a role can belong to more than one user. Therefore, there must be a many-to-many relationships between these tables. While the users table keeps users' name, email, password, activeness and username information, the roles table only keeps role name information.
 - Sale, Products, Categories, Campaigns and Sold_Product Tables:
-  - We will examine the remaining 5 tables here. First table is sale table. Sale table holds cashier name, change amount, payment type, received amount, total amount, sale time and time information of sales while sold_product table holds quantity, campaign id, product id and sale id information. In one sale there can be more than one sold product. For this reason we are establishing one-to-many relationship between sale and sold_product table.
-  - Product table holds barcode, brand, expiration date, image, description, name, price, stock and category id while campaings table holds description, name and category id information. There can be more than one sold  product which belongs to one product or one campaign. So we are establishing again one-to-many relationship between products & sold_product and campaigns & sold_product tables.
-  - Last table is categories table. Categories table holds description and name information. Because of a category can contain multiple different products and multiple different campaigns we are establishing one-to-many relationship between categories & products and categories & campaigns tables.
+  - We will examine the remaining 5 tables here. First table is sale table. Sale table holds cashier name, change amount, payment type, received amount, total amount, sale time and time information of sales while sold_product table holds quantity, campaign id, product id and sale id information. In one sale there can be more than one sold product. For this reason we are establishing a one-to-many relationship between sale and sold_product table.
+  - Product table holds barcode, brand, expiration date, image, description, name, price, stock and category id while campaings table holds description, name and category id information. There can be more than one sold  product which belongs to one product or one campaign. So we are establishing again a one-to-many relationship between products & sold_product and campaigns & sold_product tables.
+  - Last table is categories table. Categories table holds description and name information. Because of a category can contain multiple different products and multiple different campaigns we are establishing a one-to-many relationship between categories & products and categories & campaigns tables.
 
-    ![Ekran görüntüsü 2024-06-18 143245](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/2c699944-ee7d-4097-8d96-0e813ea8a5b4)
+     ![Ekran görüntüsü 2024-06-20 185119](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/063bdc05-c1dc-4933-800e-687d0ea82837)
 
 ## **Microservice Architecture**
+
+![Ekran görüntüsü 2024-06-19 191759](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/d4c1449c-6657-436d-9610-9ad0a69f67ca)
 
 ### API Gateway
 
@@ -88,9 +90,9 @@ This service is used to list the products in the system. No authorization is req
 
 ### Report Service
 
-This service lists the sales transactions. It should also be able to regenerate the receipt for any specific sale as a PDF. This service requires the role of a store manager. 
+This service lists the sales transactions. It should also be able to regenerate the receipt for any specific sale as a PDF. This service requires the role of a store manager. Jaspersoft studio is used to generate reports.
 
-  ![Ekran görüntüsü 2024-06-19 160902](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/55c5ee40-e2e4-4d61-a05b-0cabd1708209)
+![Ekran görüntüsü 2024-07-01 030604](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/a3caadc9-93f3-44b6-97c2-73ce19245d42)
 
 ### Sale Service
 
@@ -100,14 +102,12 @@ Sold products, total amount, and applied promotions should be recorded in the da
 
 There are three roles defined in the system: Cashier, Store Manager, and Admin. Roles are fixed, and a person can have one or multiple roles. It is mandatory for each person to have at least one role. So in this service there are operations for adding, updating, and deleting users. For deletions, a "soft delete" approach are applied. Only users with the Admin role can access the user management services.
 
-![Ekran görüntüsü 2024-06-19 191759](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/d4c1449c-6657-436d-9610-9ad0a69f67ca)
-
 ## **Unit Tests**
 
 
 A unit test is a type of software testing where individual units or components of a software are tested. The purpose is to validate that each unit of the software performs as expected. Unit tests are implemented for all services of the project using the JUnit5 library. To make the tests effective, an abstract fixture class and other fixture classes extending this abstract class are created. In these fixture classes, test data are generated using the GitHub Faker library. Consequently, all test data are generated randomly and falsely. This approach aims to make test classes less complex and more readable, and generate test data in a more centralized and organized manner.
 
-  ![Ekran görüntüsü 2024-06-19 165900](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/6e36dbdd-110c-444c-a604-63a352a622db)
+![Ekran görüntüsü 2024-06-30 033113](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/0c40d3e6-e2c6-4239-b84d-1abff1d4ae73)
 
 ## **Monitoring**
 
@@ -116,18 +116,21 @@ A unit test is a type of software testing where individual units or components o
 Prometheus is an open-source monitoring and alerting toolkit originally built at SoundCloud. It is designed for reliability, scalability, and easy deployment, making it a popular choice for monitoring microservices architectures. Prometheus is used in this project for comprehensive monitoring by collecting detailed metrics from each microservice. 
 
 
-  ![Ekran görüntüsü 2024-06-19 181855](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/1af44d6b-ac08-4474-98ba-f50583e0bae2)
+![Ekran görüntüsü 2024-06-23 010428](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/8012d43f-0d94-48e1-95fc-0fad427050f2)
 
 ### Grafana
 
 Grafana is an open-source analytics and visualization platform that integrates with various data sources, including Prometheus. It provides a web-based interface for creating, exploring, and sharing dashboards with interactive charts and graphs. Grafana is used in this project to effectively visualize the metrics collected by Prometheus, providing real-time insights into the status of my microservices and to create custom dashboards that help track key performance indicators and quickly identify any issues.
 
 
-  ![Ekran görüntüsü 2024-06-19 181927](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/ea46d648-7cfa-44b7-a2e3-947090d8f94d)
+![Ekran görüntüsü 2024-06-23 010633](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/71004281-53db-42de-85d1-9639fb5715b9)
 
 ### Zipkin
 
 Zipkin, an open-source distributed tracing system, tracks requests across microservices, offering insights into performance and dependencies. Zipkin is used in this project to track and analyze the flow of requests across various microservices in order to pinpoint performance issues and improve overall system reliability and performance.
+
+
+![Ekran görüntüsü 2024-06-30 025523](https://github.com/ahmetalicc/kasiyerapp/assets/117573659/2440b564-2401-48e8-8ab6-40e8366f103a)
 
 ## **Continuous Integration**
 
@@ -149,7 +152,7 @@ Jenkins is an open-source automation server widely used for continuous integrati
 **Clone the Repository:**
 
 ```bash
-git clone https://github.com/yourusername/kasiyerapp.git
+git clone https://github.com/ahmetalicc/kasiyerapp.git
 cd kasiyerapp
 ```
 
@@ -161,6 +164,7 @@ cd kasiyerapp
 **Build the Project:**
 
 In the root directory of the project, run:
+
 `mvn clean install`
 
 **Run the Application:**
@@ -181,6 +185,7 @@ In the root directory of the project, run:
 **Build Jar Files and Docker Images for Each Service:**
 
 In the root directory of the project, run:
+
 `mvn clean install`
 
 ```bash
@@ -191,6 +196,8 @@ cd ..
 Repeat the above steps for each service (service2, service3, ..., api-gateway, discovery-server).
 
 **Build and Run with Docker Compose:**
+
+Make sure your docker-compose.yml file includes the definitions for all your services. Then run:
 
 `docker-compose up --build`
 
