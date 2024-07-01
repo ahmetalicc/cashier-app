@@ -22,6 +22,7 @@ This repository is a microservice project developed with spring boot that Toyota
 * [How to Run](#how-to-run)
    - [Running Locally](#running-locally)
    - [Running with Docker](#running-with-docker)
+* [Future Improvements/Roadmap](#future-improvementsroadmap)
 * [Contact](#contact)
 
 ## **About the Project**
@@ -159,7 +160,7 @@ cd kasiyerapp
 **Set Up Database and Environment Variables:**
 
   - Create a PostgreSQL database with a name of your choice.
-  - Create a .env file in the root directory of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup. 
+  - Create a .env file in each micro service of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup. 
 
 **Build the Project:**
 
@@ -180,7 +181,7 @@ In the root directory of the project, run:
 **Set Up Database and Environment Variables:**
 
   - Create a PostgreSQL database with a name of your choice.
-  - Create a .env file in the root directory of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup.
+  - Create a .env file in each micro service of the project and add the necessary environment variables. Refer to the .env.example file for the required variables. Make sure to update the database credentials and name according to your setup.
 
 **Build Jar Files and Docker Images for Each Service:**
 
@@ -204,6 +205,46 @@ Make sure your docker-compose.yml file includes the definitions for all your ser
 **Stop the Running Application:**
 
 `docker-compose down`
+
+## **Future Improvements/Roadmap**
+
+The following improvements and features are planned for future releases to enhance the functionality, performance, and user experience of the project:
+
+### **New Features**
+
+- **User Notification System**
+  - Implement an email and SMS notification system to keep users informed about important events such as low stock alerts, sales promotions, and system updates.
+
+### **Performance Enhancements**
+
+- **Database Optimization**
+  - Refactor database schema and optimize queries to improve performance, especially for high-traffic scenarios.
+
+- **Caching**
+  - Implement caching mechanisms to reduce database load and improve response times for frequently accessed data.
+
+### **Security Enhancements**
+
+- **Audit Logging**
+  - Enhance the logging mechanism to include detailed audit logs for critical operations, helping to track changes and ensure compliance with security policies.
+
+### **Scalability Improvements**
+
+- **Microservice Scaling**
+  - Implement auto-scaling for microservices using Kubernetes to ensure the system can handle increased load efficiently.
+
+- **Load Balancing**
+  - Enhance load balancing strategies to distribute traffic more effectively across microservices.
+
+### **Developer Experience**
+
+- **Improved Documentation**
+  - Expand the documentation to include more detailed setup guides, API documentation, and best practices for contributors.
+
+### **Monitoring and Observability**
+
+- **Advanced Monitoring**
+  - Integrate additional monitoring tools such as ELK Stack (Elasticsearch, Logstash, Kibana) for more comprehensive log analysis and visualization.
 
 ## **Contact**
 
