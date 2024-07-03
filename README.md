@@ -236,6 +236,14 @@ The following improvements and features are planned for future releases to enhan
 - **Load Balancing**
   - Enhance load balancing strategies to distribute traffic more effectively across microservices.
 
+### **Package Structuring**
+
+- **Modularization**
+  - Organize packages into modules to reduce redundancy and improve maintainability across services.
+
+- **Centralization of Core Packages**
+  - Centralize common packages such as core response handling and aspect logging to ensure consistency and reusability across all services.
+
 ### **Developer Experience**
 
 - **Improved Documentation**
