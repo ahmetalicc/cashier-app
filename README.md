@@ -17,6 +17,7 @@ This repository is a microservice project developed with spring boot that Toyota
 * [Monitoring](#monitoring)
    - [Prometheus](#prometheus)
    - [Grafana](#grafana)
+   - [Zipkin](#zipkin)
 * [Continuous Integration](#continuous-integration)
    - [Jenkins](#jenkins)
 * [How to Run](#how-to-run)
