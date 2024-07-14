@@ -30,8 +30,7 @@ public class AuthConfig {
      */
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new CustomUserDetailsService(userRepository);
     }
     /**
      * Creates an AuthenticationProvider bean using a DaoAuthenticationProvider.
