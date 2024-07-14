@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     /**
      * The unique identifier for the User entity.
@@ -79,46 +79,4 @@ public class User implements UserDetails {
     )
     @JsonIgnore
     private List<Role> roles;
-    /**
-     * Returns the list of GrantedAuthority objects associated with the User's roles.
-     * @return List of GrantedAuthority objects
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Indicates whether the user account is not expired.
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user account is not locked.
-     */
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user credentials are not expired.
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * Indicates whether the user account is enabled.
-     */
-    @Override
-    public boolean isEnabled() {
-        return activeness;
-    }
 }
