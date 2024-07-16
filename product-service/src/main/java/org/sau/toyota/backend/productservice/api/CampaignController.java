@@ -7,6 +7,8 @@ import org.sau.toyota.backend.productservice.core.results.ErrorDataResult;
 import org.sau.toyota.backend.productservice.core.results.SuccessDataResult;
 import org.sau.toyota.backend.productservice.dto.response.CampaignResponse;
 import org.sau.toyota.backend.productservice.service.Abstract.CampaignService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,13 +37,13 @@ public class CampaignController {
      * @return DataResult containing a list of CampaignResponse objects
      */
     @GetMapping("/getAllCampaigns")
-    public DataResult<List<CampaignResponse>> getAllCampaigns(@RequestParam(defaultValue = "0") int page,
-                                                              @RequestParam(defaultValue = "3") int size,
-                                                              @RequestParam(defaultValue = "id") String sortBy,
-                                                              @RequestParam(defaultValue = "asc") String sortOrder,
-                                                              @RequestParam(required = false) String filter){
-        return new SuccessDataResult<>
-                (campaignService.getAllCampaigns(page, size, sortBy, sortOrder, filter), "Data has been listed.");
+    public ResponseEntity<DataResult<List<CampaignResponse>>> getAllCampaigns(@RequestParam(defaultValue = "0") int page,
+                                                                             @RequestParam(defaultValue = "3") int size,
+                                                                             @RequestParam(defaultValue = "id") String sortBy,
+                                                                             @RequestParam(defaultValue = "asc") String sortOrder,
+                                                                             @RequestParam(required = false) String filter){
+        return ResponseEntity.ok(new SuccessDataResult<>
+                (campaignService.getAllCampaigns(page, size, sortBy, sortOrder, filter), "Data has been listed successfully."));
     }
 
     /**
@@ -52,12 +54,12 @@ public class CampaignController {
      * or an {@link ErrorDataResult} if the campaign is not found or an exception occurs.
      */
     @GetMapping("/getOneCampaign/{id}")
-    public DataResult<CampaignResponse> getOneCampaign(@PathVariable("id") Long id){
+    public ResponseEntity<DataResult<CampaignResponse>> getOneCampaign(@PathVariable("id") Long id){
         try {
-            return new SuccessDataResult<>(campaignService.getOneCampaign(id), "Data has been listed.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>(campaignService.getOneCampaign(id), "Data has been listed successfully."));
         }
         catch (NullPointerException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDataResult<>(e.getMessage()));
         }
     }
 }

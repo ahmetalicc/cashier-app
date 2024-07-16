@@ -40,13 +40,13 @@ public class ProductController {
      * @return A {@link DataResult} containing a list of {@link ProductResponse} objects.
      */
     @GetMapping("/getAllProducts")
-    public DataResult<List<ProductResponse>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<DataResult<List<ProductResponse>>> getAllProducts(@RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "3") int size,
                                                             @RequestParam(defaultValue = "id") String sortBy,
                                                             @RequestParam(defaultValue = "asc") String sortOrder,
                                                             @RequestParam(required = false) String filter){
-        return new SuccessDataResult<>
-                (productService.getAllProducts(page, size, sortBy, sortOrder, filter), "Data has been listed.");
+        return ResponseEntity.ok(new SuccessDataResult<>
+                (productService.getAllProducts(page, size, sortBy, sortOrder, filter), "Data has been listed."));
     }
     /**
      * Retrieves a single product by its ID.
@@ -56,13 +56,13 @@ public class ProductController {
      * or an {@link ErrorDataResult} if the product is not found or an exception occurs.
      */
     @GetMapping("/getOneProduct/{id}")
-    public DataResult<ProductResponse> getOneProduct(@PathVariable("id") Long id){
+    public ResponseEntity<DataResult<ProductResponse>> getOneProduct(@PathVariable("id") Long id){
         try {
-            return new SuccessDataResult<>
-                    (productService.getOneProduct(id), "Data has been listed.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>
+                    (productService.getOneProduct(id), "Data has been listed."));
         }
         catch (NullPointerException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDataResult<>(e.getMessage()));
         }
     }
     /**
@@ -76,13 +76,13 @@ public class ProductController {
      * @return A {@link DataResult} containing a list of {@link ProductResponse} objects filtered by category ID.
      */
     @GetMapping("/getProductsByCategoryId/{id}")
-    public DataResult<List<ProductResponse>> getProductsByCategoryId(@PathVariable("id") Long id,
+    public ResponseEntity<DataResult<List<ProductResponse>>> getProductsByCategoryId(@PathVariable("id") Long id,
                                                                      @RequestParam(defaultValue = "0") int page,
                                                                      @RequestParam(defaultValue = "3") int size,
                                                                      @RequestParam(defaultValue = "id") String sortBy,
                                                                      @RequestParam(defaultValue = "asc") String sortOrder){
-        return new SuccessDataResult<>
-                (productService.getProductsByCategoryId(id, page, size, sortBy, sortOrder), "Data has been listed.");
+        return ResponseEntity.ok(new SuccessDataResult<>
+                (productService.getProductsByCategoryId(id, page, size, sortBy, sortOrder), "Data has been listed."));
     }
     /**
      * Adds an image for a specific product.
@@ -93,12 +93,12 @@ public class ProductController {
      * @throws IOException If an I/O error occurs during image upload.
      */
     @GetMapping("/addImg/{id}")
-    public String addImg(@RequestParam("file") MultipartFile file, @PathVariable("id")Long id) throws IOException {
+    public ResponseEntity<String> addImg(@RequestParam("file") MultipartFile file, @PathVariable("id")Long id) throws IOException {
         try {
-            return productService.addImg(file, id);
+            return ResponseEntity.status(HttpStatus.OK).body( productService.addImg(file, id));
         }
         catch (NullPointerException e){
-            return e.getMessage();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
    }
     /**
@@ -130,13 +130,13 @@ public class ProductController {
      * or an {@link ErrorDataResult} if an exception occurs during the addition process.
      */
    @PostMapping("/addProduct")
-    public DataResult<ProductResponse> addProduct(@RequestBody ProductRequest productRequest){
+    public ResponseEntity<DataResult<ProductResponse>> addProduct(@RequestBody ProductRequest productRequest){
         try {
-            return new SuccessDataResult<>
-                    (productService.addProduct(productRequest), "Product is saved to the database successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body( new SuccessDataResult<>
+                    (productService.addProduct(productRequest), "Product is saved to the database successfully."));
         }
         catch (IllegalArgumentException | NullPointerException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDataResult<>(e.getMessage()));
         }
    }
     /**
@@ -146,12 +146,12 @@ public class ProductController {
      * @return A {@link Result} indicating the success or failure of the deletion operation.
      */
     @DeleteMapping("deleteProduct/{id}")
-    public Result deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Result> deleteProduct(@PathVariable Long id) {
         try {
             productService.deleteProduct(id);
-            return new SuccessResult("Product is deleted successfully.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessResult("Product is deleted successfully."));
         } catch (NullPointerException e) {
-            return new ErrorResult(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResult(e.getMessage()));
         }
     }
     /**
@@ -163,14 +163,14 @@ public class ProductController {
      * along with the updated price and stock information.
      */
     @PutMapping("/updateProduct/{id}")
-    public Result updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest productUpdateRequest){
+    public ResponseEntity<Result> updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequest productUpdateRequest){
         try {
             productService.updateProduct(id, productUpdateRequest);
-            return new SuccessResult(String.format("Product's price and stock information are updated successfully. " +
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessResult(String.format("Product's price and stock information are updated successfully. " +
                             "The values for price and stock respectively: %s, %s",
-                    productUpdateRequest.getPrice(), productUpdateRequest.getStock()));
+                    productUpdateRequest.getPrice(), productUpdateRequest.getStock())));
         }catch (NullPointerException e){
-            return new ErrorResult(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResult(e.getMessage()));
         }
     }
 
