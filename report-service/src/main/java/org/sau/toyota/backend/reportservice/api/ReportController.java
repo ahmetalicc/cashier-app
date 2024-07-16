@@ -38,14 +38,14 @@ public class ReportController {
      * @return a DataResult object containing a list of SaleResponse objects
      */
     @GetMapping("/getAllOrders")
-    public DataResult<List<SaleResponse>> getAllOrders(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<DataResult<List<SaleResponse>>> getAllOrders(@RequestParam(defaultValue = "0") int page,
                                                        @RequestParam(defaultValue = "3") int size,
                                                        @RequestParam(defaultValue = "id") String sortBy,
                                                        @RequestParam(defaultValue = "asc") String sortOrder,
                                                        @RequestParam(required = false) String filter) {
 
-            return new SuccessDataResult<>
-                    (reportService.getAllOrders(page, size, sortBy, sortOrder, filter), "Data has been listed.");
+            return ResponseEntity.ok(new SuccessDataResult<>
+                    (reportService.getAllOrders(page, size, sortBy, sortOrder, filter), "Data has been listed successfully."));
     }
     /**
      * Retrieves a specific order by its ID.
@@ -54,12 +54,12 @@ public class ReportController {
      * @return a DataResult object containing a SaleResponse object
      */
     @GetMapping("/getOneOrder/{id}")
-    public DataResult<SaleResponse> getOneOrder(@PathVariable Long id){
+    public ResponseEntity<DataResult<SaleResponse>> getOneOrder(@PathVariable Long id){
         try {
-            return new SuccessDataResult<>(reportService.getOneOrder(id), "Data has been listed.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>(reportService.getOneOrder(id), "Data has been listed successfully."));
         }
         catch (NullPointerException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDataResult<>(e.getMessage()));
         }
     }
     /**

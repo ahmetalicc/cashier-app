@@ -5,6 +5,8 @@ import org.sau.toyota.backend.productservice.core.results.*;
 import org.sau.toyota.backend.productservice.dto.request.CategoryRequest;
 import org.sau.toyota.backend.productservice.dto.response.CategoryResponse;
 import org.sau.toyota.backend.productservice.service.Abstract.CategoryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,13 +36,13 @@ public class CategoryController {
      * @return A {@link DataResult} containing a list of {@link CategoryResponse} objects.
      */
     @GetMapping("/getAllCategories")
-    public DataResult<List<CategoryResponse>> getAllCategories(@RequestParam(defaultValue = "0") int page,
-                                                               @RequestParam(defaultValue = "3") int size,
-                                                               @RequestParam(defaultValue = "id") String sortBy,
-                                                               @RequestParam(defaultValue = "asc") String sortOrder,
-                                                               @RequestParam(required = false) String filter){
+    public ResponseEntity<DataResult<List<CategoryResponse>>> getAllCategories(@RequestParam(defaultValue = "0") int page,
+                                                                              @RequestParam(defaultValue = "3") int size,
+                                                                              @RequestParam(defaultValue = "id") String sortBy,
+                                                                              @RequestParam(defaultValue = "asc") String sortOrder,
+                                                                              @RequestParam(required = false) String filter){
 
-        return new SuccessDataResult<>(categoryService.getAllCategories(page, size, sortBy, sortOrder, filter), "Data has been listed.");
+        return ResponseEntity.ok( new SuccessDataResult<>(categoryService.getAllCategories(page, size, sortBy, sortOrder, filter), "Data has been listed successfully."));
     }
 
     /**
@@ -51,12 +53,12 @@ public class CategoryController {
      * or an {@link ErrorDataResult} if the category is not found or an exception occurs.
      */
     @GetMapping("/getOneCategory/{id}")
-    public DataResult<CategoryResponse> getOneCategory(@PathVariable("id") Long id){
+    public ResponseEntity<DataResult<CategoryResponse>> getOneCategory(@PathVariable("id") Long id){
         try {
-            return new SuccessDataResult<>(categoryService.getOneCategory(id), "Data has been listed.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>(categoryService.getOneCategory(id), "Data has been listed successfully."));
         }
         catch (NullPointerException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new ErrorDataResult<>(e.getMessage()));
         }
     }
 
@@ -67,13 +69,13 @@ public class CategoryController {
      * @return A {@link Result} indicating the success or failure of the operation.
      */
     @PostMapping("/addCategory")
-    public Result addCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<Result> addCategory(@RequestBody CategoryRequest categoryRequest){
         try{
             categoryService.addCategory(categoryRequest);
-            return new SuccessResult("Category added successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(new SuccessResult("Category added successfully."));
         }
         catch (IllegalArgumentException e){
-            return new ErrorResult(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResult(e.getMessage()));
         }
     }
     /**
@@ -83,13 +85,13 @@ public class CategoryController {
      * @return A {@link Result} indicating the success or failure of the operation.
      */
     @DeleteMapping("deleteCategory/{id}")
-    public Result deleteCategory(@PathVariable Long id){
+    public ResponseEntity<Result> deleteCategory(@PathVariable Long id){
         try{
             categoryService.deleteCategory(id);
-            return new SuccessResult("Category is deleted successfully.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessResult("Category is deleted successfully."));
         }
         catch (NullPointerException e){
-            return new ErrorResult(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResult(e.getMessage()));
         }
     }
 }

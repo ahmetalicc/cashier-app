@@ -31,11 +31,11 @@ public class AuthenticationController {
      * @return a SuccessDataResult containing a TokenResponse if login is successful, with a success message
      */
     @PostMapping("/login")
-    public DataResult<TokenResponse> auth(@RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<DataResult<TokenResponse>> auth(@RequestBody UserLoginRequest userLoginRequest){
         try {
-            return new SuccessDataResult<>(authenticationService.auth(userLoginRequest), "Login successful.");
+            return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>(authenticationService.auth(userLoginRequest), "Login successful."));
         } catch (RuntimeException e){
-            return new ErrorDataResult<>(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDataResult<>(e.getMessage()));
         }
     }
 
