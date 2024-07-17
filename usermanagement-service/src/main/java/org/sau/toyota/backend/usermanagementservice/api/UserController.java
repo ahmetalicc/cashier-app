@@ -88,7 +88,7 @@ public class UserController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new SuccessDataResult<>(userService.updateUser(id, userUpdateRequest), "User updated successfully."));
         }
-        catch (IllegalStateException e){
+        catch (NullPointerException | IllegalStateException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDataResult<>(e.getMessage()));
         }
     }
